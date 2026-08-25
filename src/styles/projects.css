@@ -1,0 +1,285 @@
+/* Two deliberately unequal treatments.
+
+   Research cards are full glass panels — blur, specular ring, tinted
+   fill, pointer sheen, elastic lift. Lab rows get no glass at all:
+   flat hairline separators, smaller type. The asymmetry is the
+   hierarchy, so don't promote the lab rows to glass. */
+
+/* ============ Research (primary) ============ */
+
+.research-list {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1.1rem;
+}
+
+/* Card visuals come from .glass / .glass-tint / .glass-sheen /
+   .glass-lift; this rule only handles structure. */
+.research-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.3rem 1rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+  color: inherit;
+}
+
+.research-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.research-number {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  transition: color var(--dur) var(--ease);
+}
+
+.research-card:hover .research-number {
+  color: var(--amber);
+}
+
+.research-title {
+  min-width: 0;
+  font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.32rem);
+  transition: color var(--dur) var(--ease);
+}
+
+/* Inline span so the underline wipe spans the text, not the cell. */
+.research-title-text {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1.5px;
+  transition: background-size var(--dur) var(--ease);
+}
+
+.research-card:hover .research-title {
+  color: var(--accent);
+}
+
+.research-card:hover .research-title-text {
+  background-size: 100% 1.5px;
+}
+
+.research-desc {
+  grid-column: 1;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 0.885rem;
+  line-height: 1.5;
+}
+
+.research-tags {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1;
+  gap: 0.35rem;
+  margin-top: 0.6rem;
+}
+
+.research-tags li {
+  padding: 0.15rem 0.58rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.725rem;
+  transition:
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.research-card:hover .research-tags li {
+  border-color: var(--line-strong);
+  color: var(--ink-soft);
+}
+
+.research-side {
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.research-venue {
+  padding: 0.2rem 0.58rem;
+  border: 1px solid color-mix(in srgb, var(--amber) 34%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--amber-soft);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 0.685rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.research-venue.is-plain {
+  border-color: transparent;
+  background: none;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.research-arrow {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1;
+  transition:
+    color var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+
+.research-card:hover .research-arrow {
+  color: var(--accent);
+  transform: translate(3px, -3px);
+}
+
+/* Staggered entrance within the revealed section. */
+.js .reveal .research-card {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 460ms var(--ease),
+    transform 460ms var(--ease);
+  transition-delay: calc(var(--row-index, 0) * 65ms);
+}
+
+.js .reveal.is-visible .research-card {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============ Lab (secondary) ============ */
+
+.lab-list {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.lab-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.15rem 0.7rem;
+  /* Slightly taller than before, so a highlighted row has some air
+     above and below it rather than butting straight into its
+     neighbours. */
+  padding: 0.76rem 0.45rem;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+}
+
+/* Soft-edged hover highlight.
+
+   A solid fill met the neighbouring rows along a hard line, so the
+   list read as one crowded block. Axis-aligned gradient masks were
+   tried next, but they thin the fill across its whole area rather
+   than only at the boundary.
+
+   Blurring a solid rounded rectangle is the right tool: the interior
+   stays at full tint and the feathering follows the rounded outline
+   itself, so the fade happens only at the edge. Insets give the blur
+   room to fall off — vertically so it lands near the row boundary
+   instead of bleeding into the next row, horizontally negative so the
+   side falloff happens outside the text column.
+
+   Tinted from --accent, so it follows the theme in both light and
+   dark without extra tokens. */
+.lab-row::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0.3rem -0.4rem;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--accent) 19%, transparent);
+  filter: blur(8px);
+  opacity: 0;
+  content: '';
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.lab-row:hover::before,
+.lab-row:focus-visible::before {
+  opacity: 1;
+}
+
+/* Content sits above the highlight: a positioned pseudo-element with
+   z-index 0 would otherwise paint over in-flow text. */
+.lab-row > * {
+  position: relative;
+  z-index: 1;
+}
+
+.lab-number {
+  color: var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-name {
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.35;
+  transition: color var(--dur) var(--ease);
+}
+
+.lab-row:hover .lab-name {
+  color: var(--accent);
+}
+
+.lab-desc {
+  grid-column: 2;
+  max-width: 58ch;
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.795rem;
+  line-height: 1.45;
+}
+
+.lab-meta {
+  grid-row: 1;
+  grid-column: 3;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.665rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .research-card {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1rem 1.05rem;
+  }
+
+  .research-side {
+    grid-row: auto;
+    grid-column: 1;
+    order: -1;
+    margin-bottom: 0.15rem;
+  }
+
+  .lab-row {
+    grid-template-columns: 1.4rem minmax(0, 1fr);
+  }
+
+  .lab-meta {
+    grid-row: auto;
+    grid-column: 2;
+    margin-top: 0.2rem;
+  }
+}

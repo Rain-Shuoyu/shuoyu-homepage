@@ -9,10 +9,12 @@ const isHttpLink = /^https?:\/\//.test(href);
 ---
 
 <a
-  class="external-link"
+  class="link-pill glass"
   href={href}
   target={isHttpLink ? '_blank' : undefined}
   rel={isHttpLink ? 'noopener noreferrer' : undefined}
 >
-  {label}<span aria-hidden="true">↗</span>
+  {label}
+  {/* Outbound arrow only for real outbound links, not mailto:. */}
+  {isHttpLink && <span class="arrow" aria-hidden="true">↗</span>}
 </a>

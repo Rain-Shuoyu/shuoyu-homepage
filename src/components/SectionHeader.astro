@@ -1,0 +1,27 @@
+---
+interface Props {
+  index: string;
+  kicker: string;
+  title: string;
+  headingId: string;
+  count?: number;
+  /* 'lead' for the section the page is about; 'quiet' for the tail. */
+  tone?: 'lead' | 'base' | 'quiet';
+}
+
+const { index, kicker, title, headingId, count, tone = 'base' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'section-header',
+    { 'is-lead': tone === 'lead', 'is-quiet': tone === 'quiet' },
+  ]}
+>
+  <span class="section-index" aria-hidden="true">{index}</span>
+  <span class="section-kicker">{kicker}</span>
+  <h2 class="section-title" id={headingId}>{title}</h2>
+  {count !== undefined && (
+    <span class="section-count" aria-hidden="true">{String(count).padStart(2, '0')}</span>
+  )}
+</div>

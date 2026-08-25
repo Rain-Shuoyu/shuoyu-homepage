@@ -1,23 +1,37 @@
 ---
 import { site } from '../data/site';
 import ExternalLink from './ExternalLink.astro';
+import CopyEmail from './CopyEmail.astro';
 import SectionNav from './SectionNav.astro';
+
+const nameParts = site.name.split(' ');
 ---
 
-<aside class="identity" aria-labelledby="identity-heading">
+<aside
+  class="identity glass glass-strong"
+  aria-labelledby="identity-heading"
+>
   <div>
-    <p class="section-kicker">{site.handle}</p>
-    <h1 id="identity-heading">{site.name}</h1>
-    <p>{site.role}</p>
-    <p>{site.affiliation}</p>
-    <p>{site.location}</p>
-    <p>{site.description}</p>
+    <p class="identity-eyebrow">{site.handle}</p>
+
+    <h1 class="identity-name" id="identity-heading">
+      {nameParts.map((part) => <span>{part}</span>)}
+    </h1>
+
+    <div class="identity-meta">
+      <p class="role">{site.role}</p>
+      <p>{site.affiliation}</p>
+      <p>{site.location}</p>
+    </div>
+
+    <p class="identity-bio">{site.description}</p>
   </div>
 
-  <p>
+  <div class="identity-links">
     <ExternalLink href={site.github} label="GitHub" />
-    <ExternalLink href={`mailto:${site.email}`} label="Email" />
-  </p>
+    <CopyEmail />
+  </div>
 
   <SectionNav />
+
 </aside>

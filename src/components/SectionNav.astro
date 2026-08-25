@@ -2,10 +2,10 @@
 import { site } from '../data/site';
 ---
 
-<nav aria-label="Sections">
+<nav class="section-nav" aria-label="Sections">
   <ul>
     {site.navigation.map((item) => (
-      <li><a href={item.href}>{item.label}</a></li>
+      <li><a href={item.href} data-nav-link>{item.label}</a></li>
     ))}
   </ul>
 </nav>

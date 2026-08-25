@@ -1,0 +1,49 @@
+---
+import type { Project } from '../data/projects';
+import SectionHeader from './SectionHeader.astro';
+
+interface Props {
+  projects: Project[];
+  /* Show only the first N. Data is left intact — slicing happens
+     here so the full list stays available (and tested). */
+  limit?: number;
+}
+
+const { projects, limit = 3 } = Astro.props;
+const shown = projects.slice(0, limit);
+---
+
+{/* No glass here on purpose: these rows stay flat hairlines so the
+    research cards above them keep all the material weight. */}
+<section id="lab" class="reveal is-quiet" aria-labelledby="lab-heading">
+  <SectionHeader
+    index="03"
+    kicker="Lab"
+    title="Side projects"
+    headingId="lab-heading"
+    tone="quiet"
+  />
+
+  <ul class="lab-list">
+    {shown.map((project, i) => (
+      <li>
+        <a
+          class="lab-row"
+          href={project.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-labelledby={`lab-${project.slug}`}
+        >
+          <span class="lab-number" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+
+          <h3 class="lab-name" id={`lab-${project.slug}`}>{project.name}</h3>
+
+          <span class="lab-meta">{project.meta}</span>
+          <p class="lab-desc">{project.description}</p>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

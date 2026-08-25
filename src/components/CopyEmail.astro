@@ -1,0 +1,118 @@
+---
+import { site } from '../data/site';
+
+/* A button rather than a mailto: link — clicking copies the address
+   instead of handing off to a mail client. The address stays visible
+   and selectable so it is still usable if the clipboard is blocked. */
+---
+
+<div class="copy-email">
+  <button
+    class="copy-email-btn link-pill glass"
+    type="button"
+    data-copy-email={site.email}
+    aria-label={`Copy email address ${site.email}`}
+  >
+    <span class="copy-email-value">{site.email}</span>
+    <svg
+      class="copy-email-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.7"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="9" y="9" width="11" height="11" rx="2.5" />
+      <path d="M15 5.5A2.5 2.5 0 0 0 12.5 3H6.5A2.5 2.5 0 0 0 4 5.5v6A2.5 2.5 0 0 0 6.5 14" />
+    </svg>
+  </button>
+
+  {/* Sibling rather than child, so the live region is not inside the
+      button whose label changes — screen readers announce it reliably. */}
+</div>
+
+<script>
+  const HOLD_MS = 1800;
+
+  /* navigator.clipboard needs a secure context, so it is absent over
+     plain HTTP and in some in-app browsers. Fall back to a hidden
+     textarea + execCommand, which is deprecated but still the only
+     thing that works there. */
+  const copyText = async (text: string) => {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        /* Permission denied or no secure context; try the fallback. */
+      }
+    }
+
+    const scratch = document.createElement('textarea');
+    scratch.value = text;
+    scratch.setAttribute('readonly', '');
+    scratch.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+    document.body.append(scratch);
+
+    try {
+      scratch.select();
+      /* Reached through an index signature on purpose: the call is
+         deliberate, and this keeps its deprecation notice out of the
+         type-check output without suppressing real diagnostics. */
+      const legacyCopy = (document as unknown as Record<string, unknown>).execCommand as (
+        commandId: string,
+      ) => boolean;
+      return legacyCopy.call(document, 'copy');
+    } catch {
+      return false;
+    } finally {
+      scratch.remove();
+    }
+  };
+
+  /* Shared, document-level toast mounted by SiteLayout. */
+  const toast = document.querySelector<HTMLElement>('[data-toast]');
+  let timer: number | undefined;
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-email]')) {
+    const email = button.dataset.copyEmail;
+    if (!email || !toast) continue;
+
+    button.addEventListener('click', async () => {
+      const ok = await copyText(email);
+
+      toast.textContent = ok ? 'Copied' : 'Press ⌘C to copy';
+      toast.classList.toggle('is-error', !ok);
+      /* Reflow between clearing and re-adding, so a second click
+         replays the transition instead of doing nothing. */
+      toast.classList.remove('is-visible');
+      void toast.offsetWidth;
+      toast.classList.add('is-visible');
+
+      /* If the clipboard was unavailable, leave the address selected
+         so the manual shortcut in the message actually works. */
+      if (!ok) {
+        const range = document.createRange();
+        const value = button.querySelector('.copy-email-value');
+        if (value) {
+          range.selectNodeContents(value);
+          const selection = getSelection();
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+        }
+      }
+
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        toast.classList.remove('is-visible');
+        /* Clearing the text keeps the live region silent until the
+           next copy, and re-hides the element via :empty. */
+        timer = window.setTimeout(() => {
+          toast.textContent = '';
+        }, 220);
+      }, HOLD_MS);
+    });
+  }
+</script>

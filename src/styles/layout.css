@@ -1,0 +1,245 @@
+/* Page shell, sticky identity rail, theme toggle. */
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.6fr) minmax(0, 1.4fr);
+  gap: clamp(1.75rem, 3.5vw, 4rem);
+  width: min(100% - (var(--gutter) * 2), var(--max-width));
+  margin-inline: auto;
+  padding-block: clamp(2rem, 3.5vw, 3rem) clamp(2rem, 3.5vw, 3rem);
+}
+
+/* ---------- Identity rail ---------- */
+
+.identity {
+  position: sticky;
+  top: clamp(2rem, 3.5vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  align-self: start;
+  /* Glass panel: uses the stronger fill because it carries the most
+     small text on the page. */
+  padding: 1.5rem 1.35rem;
+  border-radius: var(--radius-lg);
+}
+
+.identity-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.identity-eyebrow::after {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--line-strong), transparent);
+  content: '';
+}
+
+/* Name breaks one word per line, with a short amber rule beneath. */
+.identity-name {
+  margin-top: 0.7rem;
+}
+
+.identity-name span {
+  display: block;
+}
+
+.identity-name::after {
+  display: block;
+  width: 2.25rem;
+  height: 3px;
+  margin-top: 0.8rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--amber-bright), var(--accent));
+  content: '';
+}
+
+.identity-meta {
+  margin-top: 0.95rem;
+  display: grid;
+  gap: 0.15rem;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+.identity-meta .role {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.identity-bio {
+  max-width: 32ch;
+  margin-top: 0.85rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.identity-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* ---------- Section nav ---------- */
+
+.section-nav ul {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.section-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color var(--dur) var(--ease);
+}
+
+/* The rule grows and turns amber on the active/hovered item. */
+.section-nav a::before {
+  width: 0.9rem;
+  height: 1px;
+  background: var(--line-strong);
+  content: '';
+  transition:
+    width var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.section-nav a:hover,
+.section-nav a:focus-visible,
+.section-nav a[aria-current='true'] {
+  color: var(--ink);
+}
+
+.section-nav a:hover::before,
+.section-nav a:focus-visible::before,
+.section-nav a[aria-current='true']::before {
+  width: 2rem;
+  background: var(--amber-bright);
+}
+
+/* ---------- Theme toggle ---------- */
+
+/* Glass pill; .glass supplies fill, ring and blur. */
+.theme-toggle {
+  position: fixed;
+  top: 1.15rem;
+  right: 1.15rem;
+  z-index: 20;
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition:
+    color var(--dur) var(--ease),
+    transform var(--dur) var(--ease-spring),
+    background-color var(--dur) var(--ease);
+}
+
+.theme-toggle:hover {
+  background: var(--glass-fill-strong);
+  color: var(--accent);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: translateY(-1px) scale(0.97);
+}
+
+.theme-toggle svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* Show exactly one icon per resolved theme. */
+.theme-toggle .icon-moon,
+:root[data-theme='dark'] .theme-toggle .icon-sun {
+  display: none;
+}
+
+:root[data-theme='dark'] .theme-toggle .icon-moon {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .theme-toggle .icon-sun {
+    display: none;
+  }
+
+  :root:not([data-theme='light']) .theme-toggle .icon-moon {
+    display: block;
+  }
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--section-gap);
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Plain text, inheriting the footer's own mono/uppercase treatment —
+   no pill, no fill. */
+.footer-link {
+  color: var(--muted);
+  transition: color var(--dur) var(--ease);
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+  color: var(--accent);
+}
+
+@media (max-width: 860px) {
+  .page {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding-block: 2.25rem 2rem;
+  }
+
+  .identity {
+    position: static;
+  }
+
+  /* On narrow screens the nav duplicates the visible section
+     headings directly below it, so hide it rather than stack it. */
+  .section-nav {
+    display: none;
+  }
+}

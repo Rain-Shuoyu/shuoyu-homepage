@@ -1,0 +1,54 @@
+/* Document-level toast: enters downward from the top edge of the
+   viewport and retracts back up the way it came. */
+
+.toast-region {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40; /* above the theme toggle at 20 */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 0.9rem;
+  pointer-events: none;
+}
+
+.toast {
+  padding: 0.44rem 1rem;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  /* Parked fully above its own box plus the region padding, so it is
+     off-screen rather than clipped at the edge. */
+  transform: translateY(calc(-100% - 1.1rem));
+  transition:
+    opacity 180ms var(--ease),
+    transform 300ms var(--ease-spring);
+}
+
+/* Hidden while empty, so the live region stays silent until a message
+   is set and nothing invisible catches pointer events. */
+.toast:empty {
+  display: none;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.is-error {
+  color: var(--amber);
+}
+
+/* Fade only — no vertical travel — when motion is reduced. */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transform: none;
+  }
+}

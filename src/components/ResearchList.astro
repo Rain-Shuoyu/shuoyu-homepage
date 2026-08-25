@@ -1,0 +1,67 @@
+---
+import type { Project } from '../data/projects';
+import SectionHeader from './SectionHeader.astro';
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+
+/* A 4-digit year means a real venue (e.g. "ICRA 2026") and earns the
+   amber badge; descriptive labels stay plain. */
+const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
+---
+
+<section id="research" class="reveal" aria-labelledby="research-heading">
+  <SectionHeader
+    index="02"
+    kicker="Research"
+    title="Selected work"
+    headingId="research-heading"
+    count={projects.length}
+    tone="lead"
+  />
+
+  <ul class="research-list">
+    {projects.map((project, i) => (
+      <li>
+        {/* The whole card is the anchor, so no stretched pseudo-element
+            is needed under the glass layers. aria-labelledby keeps the
+            accessible name to the title rather than every word inside. */}
+        <a
+          class="research-card glass glass-tint glass-lift"
+          href={project.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-labelledby={`research-${project.slug}`}
+          style={`--row-index:${i}`}
+        >
+          <div class="research-head">
+            <span class="research-number" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3 class="research-title" id={`research-${project.slug}`}>
+              <span class="research-title-text">{project.name}</span>
+            </h3>
+          </div>
+
+          <div class="research-side">
+            <span class:list={['research-venue', { 'is-plain': !isVenue(project.meta) }]}>
+              {project.meta}
+            </span>
+            <span class="research-arrow" aria-hidden="true">↗</span>
+          </div>
+
+          <p class="research-desc">{project.description}</p>
+
+          <ul class="research-tags">
+            {project.tags.map((tag) => (
+              <li>{tag}</li>
+            ))}
+          </ul>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

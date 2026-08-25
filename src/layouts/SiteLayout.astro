@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import Toast from '../components/Toast.astro';
 
 interface Props {
   title: string;
@@ -15,9 +17,9 @@ const canonicalUrl = canonical.toString();
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f8fafc" />
+    <meta id="theme-color" name="theme-color" content="#eaeef6" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
     <title>{title}</title>
@@ -26,8 +28,98 @@ const canonicalUrl = canonical.toString();
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+
+    {/* Runs before first paint: applies the stored theme so there is no
+        flash, and marks the document as JS-capable so CSS can safely
+        hide reveal content it knows will be un-hidden. */}
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        try {
+          var stored = localStorage.getItem('theme');
+          if (stored === 'dark' || stored === 'light') {
+            root.dataset.theme = stored;
+          }
+        } catch (e) {
+          /* Storage blocked (private mode); fall back to system preference. */
+        }
+        var dark =
+          root.dataset.theme === 'dark' ||
+          (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+        var meta = document.getElementById('theme-color');
+        if (meta) meta.setAttribute('content', dark ? '#0a0d14' : '#eaeef6');
+      })();
+    </script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {/* Liquid marbling for the glass panels to blur. Without detail at
+        this scale, backdrop-filter has nothing visible to smear. */}
+    <div class="backdrop-liquid" aria-hidden="true"></div>
+    <ThemeToggle />
+    <Toast />
     <slot />
+
+    {/* Theme toggle and scroll reveal live here rather than on a page,
+        so every page in the site gets them. */}
+    <script>
+      const root = document.documentElement;
+
+      /* ---------- Theme toggle ---------- */
+      const toggle = document.getElementById('theme-toggle');
+      const meta = document.getElementById('theme-color');
+      const systemDark = matchMedia('(prefers-color-scheme: dark)');
+
+      const resolved = () => root.dataset.theme || (systemDark.matches ? 'dark' : 'light');
+
+      const paint = () => {
+        const dark = resolved() === 'dark';
+        meta?.setAttribute('content', dark ? '#0a0d14' : '#eaeef6');
+        toggle?.setAttribute(
+          'aria-label',
+          dark ? 'Switch to light theme' : 'Switch to dark theme',
+        );
+      };
+
+      toggle?.addEventListener('click', () => {
+        const next = resolved() === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {
+          /* Storage blocked; the choice just won't persist across reloads. */
+        }
+        paint();
+      });
+
+      /* Follow the OS while the user has made no explicit choice. */
+      systemDark.addEventListener('change', () => {
+        if (!root.dataset.theme) paint();
+      });
+
+      paint();
+
+      /* ---------- Scroll reveal ---------- */
+      const reveals = document.querySelectorAll<HTMLElement>('.reveal');
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduced || !('IntersectionObserver' in window)) {
+        reveals.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+        );
+        reveals.forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>

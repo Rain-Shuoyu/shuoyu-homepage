@@ -1,13 +1,30 @@
 ---
 import { site } from '../data/site';
-import ExternalLink from './ExternalLink.astro';
+import SectionHeader from './SectionHeader.astro';
 ---
 
-<section id="about" aria-labelledby="about-heading">
-  <h2 id="about-heading" class="section-kicker">About</h2>
-  <p>I’m a computer science undergraduate researcher who also builds small tools and experiments.</p>
-  <p>
-    <ExternalLink href={site.github} label="GitHub" />
-    <ExternalLink href={`mailto:${site.email}`} label="Email" />
-  </p>
+{/* Opens the page, but stays on the quiet tone so the Research header
+    below is still the first prominent thing a reader lands on. */}
+<section id="about" class="reveal is-quiet" aria-labelledby="about-heading">
+  <SectionHeader
+    index="01"
+    kicker="About"
+    title="About me"
+    headingId="about-heading"
+    tone="quiet"
+  />
+
+  <div class="about-body">
+    {site.about.map((paragraph) => (
+      <p>{paragraph}</p>
+    ))}
+  </div>
+
+  <p class="about-focus-label">My research focuses on</p>
+
+  <ul class="focus-list">
+    {site.researchFocus.map((item) => (
+      <li class="glass">{item}</li>
+    ))}
+  </ul>
 </section>

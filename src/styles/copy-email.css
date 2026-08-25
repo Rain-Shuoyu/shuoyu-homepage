@@ -1,0 +1,41 @@
+/* Copy-to-clipboard email control. The confirmation toast is a
+   document-level element — see toast.css. */
+
+.copy-email {
+  display: inline-flex;
+}
+
+/* Reuses .link-pill for shape and .glass for material, so these rules
+   only undo the button defaults.
+
+   Deliberately sets no font-size and no font-family: both are
+   inherited from .link-pill so this button and the GitHub one are
+   identical in height. An earlier version overrode them with mono at
+   0.74rem, which made this pill visibly shorter — and pinning
+   line-height did not fix it, because line-height resolves against
+   each element's own font-size. */
+.copy-email-btn {
+  border: 0;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  /* Last-resort net: the address is much longer than "Email" was, so
+     let it break rather than overflow the rail. */
+  overflow-wrap: anywhere;
+}
+
+.copy-email-value {
+  min-width: 0;
+}
+
+.copy-email-icon {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: none;
+  opacity: 0.65;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.copy-email-btn:hover .copy-email-icon,
+.copy-email-btn:focus-visible .copy-email-icon {
+  opacity: 1;
+}

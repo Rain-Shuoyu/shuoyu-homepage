@@ -1,0 +1,169 @@
+/* ============================================================
+   Liquid-glass material.
+
+   Blur is only visible when there is high-frequency detail behind
+   it. A 32px Gaussian over a 600px-scale gradient is very nearly an
+   identity transform — which is why translucent panels over a smooth
+   background read as flat colour, not glass. The .backdrop-liquid
+   marbling in base.css exists to give this filter something to smear.
+
+   Four things together make the material read as thick glass:
+     1. blur + saturate + brightness — frost. Saturation matters as
+        much as blur; without it the panel looks like grey plastic.
+     2. bevel shadow stack           — lit top rim, compressed sides,
+        bounce along the bottom. This is what reads as thickness
+        rather than a flat film.
+     3. specular ring + fringe       — 1px gradient border with faint
+        chromatic dispersion, as real glass splits light.
+
+   True refraction (displacing the backdrop image) is still not
+   portable: backdrop-filter cannot displace, and Safari rejects
+   url() SVG filters there. A masked edge-lens band was tried as a
+   stand-in and removed — see the note further down.
+
+   Knobs live in tokens.css: --glass-blur, --glass-sat,
+   --glass-bright, and the --glass-fill-* alphas.
+   ============================================================ */
+
+.glass {
+  position: relative;
+  background-color: var(--glass-fill);
+  /* Ambient light catch, not a spot. The gradient centre is parked
+     above the panel's top edge, so there is no visible bright blob —
+     only a broad falloff from the top-left. An earlier version
+     tracked the pointer here, which drew the eye away from the
+     content and was removed. */
+  background-image: radial-gradient(
+    125% 85% at 22% -20%,
+    var(--sheen),
+    transparent 64%
+  );
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat))
+    brightness(var(--glass-bright));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat))
+    brightness(var(--glass-bright));
+  border-radius: var(--radius);
+  /* Bevel stack, all feathered — no hard inner edge, so nothing can
+     read as a nested card or fall out of parallel at the corners.
+     Wide, soft insets do the work the removed lens band was meant to:
+     light gathering at the rim and falling off toward the middle. */
+  box-shadow:
+    inset 0 1px 0 var(--rim-top),
+    inset 0 8px 16px -10px var(--rim-top),
+    inset 0 -1px 0 var(--rim-bottom),
+    inset 0 -14px 20px -14px var(--rim-bottom),
+    inset 14px 0 22px -18px var(--rim-side),
+    inset -14px 0 22px -18px var(--rim-side),
+    var(--glass-shadow);
+}
+
+/* Specular ring with chromatic fringing. padding + mask-composite
+   punches out the centre, leaving a true 1px gradient border. */
+.glass::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    145deg,
+    var(--glass-ring-hi) 0%,
+    var(--fringe-a) 13%,
+    var(--glass-ring-lo) 36%,
+    var(--glass-ring-lo) 60%,
+    var(--fringe-b) 85%,
+    var(--glass-ring-hi) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  content: '';
+  pointer-events: none;
+}
+
+/* An earlier version added a hard-edged "edge lens" band here: a
+   masked ring with a second, stronger backdrop-filter, meant to mimic
+   how a thick edge compresses what is behind it. It was removed
+   because it produced a visible artefact rather than an illusion.
+
+   Two reasons, worth recording so it does not get reintroduced:
+     - the band ran at a lower saturation than the panel body, so in
+       dark mode it read as a distinctly darker nested card;
+     - the mask's inner edge should pick up a concentric radius of
+       (outer - band width), but browsers disagree about the inner
+       radius of a content-box mask and commonly render it square, so
+       the inner corners did not stay parallel to the outer ones.
+
+   The bevel shadow stack on .glass carries the thickness instead. It
+   is feathered, so it has no inner boundary that can misalign. */
+
+/* Fill variants set background-color only — the shorthand would wipe
+   out the sheen background-image inherited from .glass. */
+.glass-strong {
+  background-color: var(--glass-fill-strong);
+}
+
+.glass-tint {
+  background-color: var(--glass-fill-tint);
+}
+
+/* Elastic lift; --ease-spring gives the slight overshoot that makes
+   the material feel soft rather than rigid. */
+.glass-lift {
+  transition:
+    transform var(--dur) var(--ease-spring),
+    box-shadow var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.glass-lift:hover,
+.glass-lift:focus-within {
+  background-color: var(--glass-fill-strong);
+  box-shadow:
+    inset 0 1px 0 var(--rim-top),
+    inset 0 10px 20px -10px var(--rim-top),
+    inset 0 -1px 0 var(--rim-bottom),
+    inset 0 -16px 24px -14px var(--rim-bottom),
+    inset 16px 0 26px -18px var(--rim-side),
+    inset -16px 0 26px -18px var(--rim-side),
+    var(--glass-shadow-lg);
+  transform: translateY(-3px) scale(1.006);
+}
+
+/* Content must sit above the ring and lens pseudo-elements. */
+.glass > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Without backdrop-filter the fill alone is too sheer to read
+   against, so make panels substantially opaque instead. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background-color: color-mix(in srgb, var(--bg) 80%, white 20%);
+  }
+
+  .glass-strong,
+  .glass-tint {
+    background-color: color-mix(in srgb, var(--bg) 88%, white 12%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after,
+  .backdrop-liquid,
+  .backdrop-liquid::before {
+    animation: none;
+  }
+
+  .glass-lift:hover,
+  .glass-lift:focus-within {
+    transform: none;
+  }
+}

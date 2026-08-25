@@ -1,0 +1,48 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../data/site';
+import { changelog } from '../data/changelog';
+
+const lastUpdated = changelog[0]?.date;
+---
+
+<SiteLayout
+  title={`Changelog — ${site.name}`}
+  description={`Update log for ${site.name}'s personal site.`}
+>
+  <div class="doc-page">
+    <main id="main">
+      <a class="doc-back" href="/">
+        <span class="arrow" aria-hidden="true">←</span>
+        Back to home
+      </a>
+
+      <header class="doc-head">
+        <p class="doc-kicker">Changelog</p>
+        <h1 class="doc-title">Site updates</h1>
+      </header>
+
+      {lastUpdated && <p class="doc-sub">Last updated {lastUpdated}</p>}
+
+      <ol class="changelog-list">
+        {changelog.map((entry) => (
+          <li class="changelog-entry glass reveal">
+            <div class="changelog-entry-head">
+              <span class="changelog-date">{entry.date}</span>
+              <h2 class="changelog-title">{entry.title}</h2>
+            </div>
+
+            <ul class="changelog-items">
+              {entry.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+
+      <SiteFooter showChangelogLink={false} />
+    </main>
+  </div>
+</SiteLayout>

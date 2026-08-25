@@ -1,0 +1,116 @@
+/* Secondary document pages (changelog). Single centred column rather
+   than the home page's sidebar split — there is no navigation rail to
+   anchor, so the content carries the page on its own. */
+
+.doc-page {
+  width: min(100% - (var(--gutter) * 2), 46rem);
+  margin-inline: auto;
+  padding-block: clamp(2rem, 3.5vw, 3rem) clamp(2rem, 3.5vw, 3rem);
+}
+
+.doc-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color var(--dur) var(--ease);
+}
+
+.doc-back:hover,
+.doc-back:focus-visible {
+  color: var(--accent);
+}
+
+.doc-back .arrow {
+  transition: transform var(--dur) var(--ease);
+}
+
+.doc-back:hover .arrow,
+.doc-back:focus-visible .arrow {
+  transform: translateX(-3px);
+}
+
+.doc-head {
+  margin-top: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, var(--accent), var(--line) 65%, transparent) 1;
+}
+
+.doc-kicker {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.doc-title {
+  margin-top: 0.4rem;
+  font-size: clamp(1.6rem, 1.25rem + 1.4vw, 2.3rem);
+}
+
+.doc-sub {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Changelog entries ---------- */
+
+.changelog-list {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1.4rem;
+}
+
+.changelog-entry {
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius);
+}
+
+.changelog-entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.7rem;
+}
+
+.changelog-date {
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.changelog-title {
+  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.2rem);
+}
+
+.changelog-items {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+}
+
+.changelog-items li {
+  display: grid;
+  grid-template-columns: 0.85rem minmax(0, 1fr);
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.changelog-items li::before {
+  margin-top: 0.55em;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: var(--line-strong);
+  content: '';
+}

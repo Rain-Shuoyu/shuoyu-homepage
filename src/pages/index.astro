@@ -1,21 +1,74 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import SideIdentity from '../components/SideIdentity.astro';
-import NowSection from '../components/NowSection.astro';
-import ProjectList from '../components/ProjectList.astro';
+import ResearchList from '../components/ResearchList.astro';
+import LabList from '../components/LabList.astro';
 import AboutSection from '../components/AboutSection.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import { site } from '../data/site';
 import { labProjects, researchProjects } from '../data/projects';
+
 ---
 
 <SiteLayout title={site.name + ' — Researcher & Builder'} description={site.description}>
   <div class="page">
     <SideIdentity />
-    <main class="content">
-      <NowSection />
-      <ProjectList heading="Research" projects={researchProjects} />
-      <ProjectList heading="Lab" projects={labProjects} />
+
+    <main class="content" id="main">
       <AboutSection />
+
+      <ResearchList projects={researchProjects} />
+
+      {/* Deliberately truncated and visually demoted. */}
+      <LabList projects={labProjects} limit={3} />
+
+      <SiteFooter />
     </main>
   </div>
 </SiteLayout>
+
+<script>
+  /* ---------- Nav scrollspy ---------- */
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]')];
+  const targets = links
+    .map((link) => {
+      const id = link.getAttribute('href')?.slice(1);
+      const section = id ? document.getElementById(id) : null;
+      return section ? { link, section } : null;
+    })
+    .filter((pair): pair is { link: HTMLAnchorElement; section: HTMLElement } => pair !== null);
+
+  if (targets.length && 'IntersectionObserver' in window) {
+    /* Track ratios for every section and mark the most visible one,
+       so fast scrolls can't leave two items highlighted. */
+    const ratios = new Map<Element, number>();
+
+    const spy = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          ratios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+        }
+
+        let best: Element | null = null;
+        let bestRatio = 0;
+        for (const [element, ratio] of ratios) {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            best = element;
+          }
+        }
+
+        for (const { link, section } of targets) {
+          if (best === section) {
+            link.setAttribute('aria-current', 'true');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        }
+      },
+      { threshold: [0, 0.15, 0.35, 0.6, 0.85] },
+    );
+
+    targets.forEach(({ section }) => spy.observe(section));
+  }
+</script>
