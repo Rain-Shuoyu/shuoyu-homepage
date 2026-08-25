@@ -1,0 +1,13 @@
+---
+import { site } from '../data/site';
+import ExternalLink from './ExternalLink.astro';
+---
+
+<section id="about" aria-labelledby="about-heading">
+  <h2 id="about-heading" class="section-kicker">About</h2>
+  <p>I’m a computer science undergraduate researcher who also builds small tools and experiments.</p>
+  <p>
+    <ExternalLink href={site.github} label="GitHub" />
+    <ExternalLink href={`mailto:${site.email}`} label="Email" />
+  </p>
+</section>

@@ -1,0 +1,11 @@
+---
+import { site } from '../data/site';
+---
+
+<nav aria-label="Sections">
+  <ul>
+    {site.navigation.map((item) => (
+      <li><a href={item.href}>{item.label}</a></li>
+    ))}
+  </ul>
+</nav>

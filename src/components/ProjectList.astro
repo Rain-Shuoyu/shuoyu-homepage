@@ -1,0 +1,37 @@
+---
+import type { Project } from '../data/projects';
+import ExternalLink from './ExternalLink.astro';
+
+interface Props {
+  heading: string;
+  projects: Project[];
+}
+
+const { heading, projects } = Astro.props;
+const sectionId = heading.toLowerCase();
+const headingId = `${sectionId}-heading`;
+---
+
+<section id={sectionId} aria-labelledby={headingId}>
+  <h2 id={headingId} class="section-kicker">{heading}</h2>
+  <div class="project-list">
+    {projects.map((project) => (
+      <article class="project-row">
+        <div class="project-main">
+          <h3>{project.name}</h3>
+          <p>{project.description}</p>
+          <ul class="project-tags">
+            {project.tags.map((tag) => (
+              <li>{tag}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="project-side">
+          <p class="project-meta">{project.meta}</p>
+          <ExternalLink href={project.href} label={`View ${project.name}`} />
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

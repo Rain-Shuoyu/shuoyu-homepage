@@ -1,0 +1,23 @@
+---
+import { site } from '../data/site';
+import ExternalLink from './ExternalLink.astro';
+import SectionNav from './SectionNav.astro';
+---
+
+<aside class="identity" aria-labelledby="identity-heading">
+  <div>
+    <p class="section-kicker">{site.handle}</p>
+    <h1 id="identity-heading">{site.name}</h1>
+    <p>{site.role}</p>
+    <p>{site.affiliation}</p>
+    <p>{site.location}</p>
+    <p>{site.description}</p>
+  </div>
+
+  <p>
+    <ExternalLink href={site.github} label="GitHub" />
+    <ExternalLink href={`mailto:${site.email}`} label="Email" />
+  </p>
+
+  <SectionNav />
+</aside>
