@@ -1,0 +1,253 @@
+:root {
+  --bg: #f8fafc;
+  --surface: #eef3f7;
+  --ink: #17212b;
+  --muted: #657587;
+  --line: #cbd5df;
+  --cobalt: #3e76ad;
+  --cobalt-soft: #dbe8f4;
+  --max-width: 1180px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 4px;
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+}
+
+h2 {
+  font-size: clamp(1.85rem, 3vw, 3rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+h3 {
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(3rem, 8vw, 8rem);
+  width: min(calc(100% - 4rem), var(--max-width));
+  max-width: var(--max-width);
+  min-height: 100vh;
+  margin-inline: auto;
+  padding: 3rem 0;
+}
+
+.identity {
+  position: sticky;
+  top: 3rem;
+  align-self: start;
+  display: flex;
+  min-height: calc(100vh - 6rem);
+  flex-direction: column;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content > section + section {
+  margin-top: clamp(5rem, 10vw, 8rem);
+}
+
+.content section {
+  scroll-margin-top: 3rem;
+}
+
+.section-kicker {
+  color: var(--cobalt);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.content section > h2 {
+  margin-top: 0.7rem;
+}
+
+.project-list {
+  margin-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9rem, 0.32fr);
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+  transition: border-color 180ms ease;
+}
+
+.project-row:hover,
+.project-row:focus-within {
+  border-color: var(--cobalt);
+}
+
+.project-row:hover .project-main h3,
+.project-row:focus-within .project-main h3 {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+
+.project-main {
+  min-width: 0;
+}
+
+.project-main p {
+  max-width: 60ch;
+  margin-top: 0.65rem;
+  color: var(--muted);
+}
+
+.project-side {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  text-align: right;
+}
+
+.project-meta {
+  color: var(--cobalt);
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem 0.75rem;
+  margin-top: 1rem;
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  list-style: none;
+}
+
+.project-tags li + li::before {
+  margin-right: 0.75rem;
+  color: var(--line);
+  content: '·';
+}
+
+.external-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: var(--cobalt);
+  text-underline-offset: 0.18em;
+  transition: color 180ms ease;
+}
+
+.external-link:hover,
+.external-link:focus-visible,
+.project-row:hover .external-link,
+.project-row:focus-within .external-link {
+  text-decoration: underline;
+}
+
+@media (max-width: 800px) {
+  .page {
+    display: block;
+    width: min(calc(100% - 2rem), var(--max-width));
+    padding: 1.5rem 0 3rem;
+  }
+
+  .identity {
+    position: static;
+    min-height: auto;
+    margin-bottom: 4rem;
+  }
+
+  .project-row {
+    grid-template-columns: 1fr;
+  }
+
+  .project-side {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .project-tags {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
