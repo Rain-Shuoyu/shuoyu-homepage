@@ -5,8 +5,14 @@ interface Props {
 }
 
 const { href, label } = Astro.props;
+const isHttpLink = /^https?:\/\//.test(href);
 ---
 
-<a class="external-link" href={href} target="_blank" rel="noopener noreferrer">
+<a
+  class="external-link"
+  href={href}
+  target={isHttpLink ? '_blank' : undefined}
+  rel={isHttpLink ? 'noopener noreferrer' : undefined}
+>
   {label}<span aria-hidden="true">↗</span>
 </a>
