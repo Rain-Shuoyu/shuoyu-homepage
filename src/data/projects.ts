@@ -58,7 +58,7 @@ export const labProjects: Project[] = [
     href: 'https://github.com/Rain-Shuoyu/TruthForge-Public',
   },
   {
-    slug: 'poly-go',
+    slug: 'polygo',
     name: 'PolyGo',
     section: 'lab',
     meta: 'Web App · Python',
@@ -67,7 +67,7 @@ export const labProjects: Project[] = [
     href: 'https://github.com/Rain-Shuoyu/PolyGo-Public',
   },
   {
-    slug: 'after-glow',
+    slug: 'afterglow',
     name: 'AfterGlow',
     section: 'lab',
     meta: 'App · Swift / Python',
@@ -76,7 +76,7 @@ export const labProjects: Project[] = [
     href: 'https://github.com/Rain-Shuoyu/AfterGlow-AI-Powered-Reflective-Journal-Manager',
   },
   {
-    slug: 'neural-block',
+    slug: 'neuralblock',
     name: 'NeuralBlock',
     section: 'lab',
     meta: 'Tool · JavaScript',
