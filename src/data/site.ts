@@ -4,6 +4,15 @@ export const site = {
   role: 'Undergraduate researcher',
   affiliation: 'Sun Yat-sen University · iSEE Lab',
   location: 'Guangzhou, China',
+  /* Structured counterparts to the two display strings above. The
+     display strings stay human-readable; these carry the parts that
+     JSON-LD needs as separate entities, so nothing has to parse a
+     "A · B" string back apart at build time. */
+  university: 'Sun Yat-sen University',
+  school: 'School of Computer Science',
+  lab: 'iSEE Lab',
+  city: 'Guangzhou',
+  countryCode: 'CN',
   github: 'https://github.com/Rain-Shuoyu',
   /* Served from public/. ASCII filename on purpose — a non-ASCII one
      needs percent-encoding in the href and is fragile across hosts. */

@@ -1,0 +1,84 @@
+---
+import { site } from '../data/site';
+
+/* JSON-LD for the home page only.
+
+   The point is disambiguation: it tells a search engine that this page
+   is about a specific person, at a named institution, working on named
+   topics — so a query for the name can be tied to this site rather than
+   to someone else with the same name.
+
+   Everything here restates what the page already shows in visible text.
+   Structured data that claims more than the page does is what search
+   engines treat as spam, so this stays a mirror of the rendered
+   content, not an expansion of it. */
+
+const canonical = Astro.site ?? new URL('https://shuoyu.me');
+
+const university = {
+  '@type': 'CollegeOrUniversity',
+  name: site.university,
+};
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': new URL('/#person', canonical).toString(),
+      name: site.name,
+      url: canonical.toString(),
+      image: new URL('/og.png', canonical).toString(),
+      description: site.description,
+      jobTitle: site.role,
+      email: `mailto:${site.email}`,
+      /* The research areas the page lists under "My research focuses on". */
+      knowsAbout: [...site.researchFocus],
+      affiliation: [
+        university,
+        {
+          '@type': 'ResearchOrganization',
+          name: site.lab,
+          parentOrganization: university,
+        },
+      ],
+      alumniOf: {
+        '@type': 'CollegeOrUniversity',
+        name: site.university,
+        department: { '@type': 'CollegeOrUniversity', name: site.school },
+      },
+      workLocation: {
+        '@type': 'Place',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: site.city,
+          addressCountry: site.countryCode,
+        },
+      },
+      /* Profiles that corroborate the identity. Adding a Google Scholar
+         or ORCID URL here is the single strongest disambiguation signal
+         available — worth revisiting once those are public. */
+      sameAs: [site.github],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': new URL('/#website', canonical).toString(),
+      url: canonical.toString(),
+      name: site.name,
+      description: site.description,
+      inLanguage: 'en',
+      /* Ties the site to the person above rather than leaving two
+         unconnected entities. */
+      about: { '@id': new URL('/#person', canonical).toString() },
+      publisher: { '@id': new URL('/#person', canonical).toString() },
+    },
+  ],
+};
+
+/* Escaping "<" keeps a literal </script> in any future string value
+   from ending the block early. All values are static site data today,
+   so this is defensive rather than load-bearing. */
+const json = JSON.stringify(graph).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" is:inline set:html={json} />

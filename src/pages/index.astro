@@ -5,12 +5,15 @@ import ResearchList from '../components/ResearchList.astro';
 import LabList from '../components/LabList.astro';
 import AboutSection from '../components/AboutSection.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import PersonSchema from '../components/PersonSchema.astro';
 import { site } from '../data/site';
 import { labProjects, researchProjects } from '../data/projects';
-
 ---
 
 <SiteLayout title={site.name + ' — Researcher & Builder'} description={site.description}>
+  {/* Home page only: the project pages describe work, not a person. */}
+  <PersonSchema />
+
   <div class="page">
     <SideIdentity />
 
