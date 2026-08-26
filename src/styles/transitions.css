@@ -1,0 +1,60 @@
+/* Cross-document view transitions.
+
+   Deliberately CSS-only, with no <ClientRouter />. Every script on this
+   site runs once at module scope — theme toggle, scroll reveal,
+   scrollspy, video autoplay, and both copy buttons. Under a
+   client-side router none of them would re-run after the first
+   navigation, so each would silently stop working on every page after
+   the first. Reaching for the router means rewiring all five to
+   astro:page-load and handling observer teardown; this at-rule needs
+   none of that.
+
+   Support is Chromium 126+. Safari and Firefox simply cut between pages
+   as before — a graceful absence rather than a broken state. */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Quicker out than in: leaving should feel immediate, arriving settled.
+   Both stay short enough not to delay reading. */
+::view-transition-old(root) {
+  animation: page-exit 170ms var(--ease) both;
+}
+
+::view-transition-new(root) {
+  animation: page-enter 260ms var(--ease) both;
+}
+
+@keyframes page-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* The toggle sits at the same fixed spot on every page, so naming it
+   carries it across the transition instead of letting it fade out and
+   back in with the rest of the document. */
+.theme-toggle {
+  view-transition-name: theme-toggle;
+}
+
+/* The backdrop layers are deliberately left unnamed: they are identical
+   on every page, so cross-fading them is imperceptible, and
+   view-transition-name would create a stacking context that could
+   disturb their negative z-index layering. */
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
