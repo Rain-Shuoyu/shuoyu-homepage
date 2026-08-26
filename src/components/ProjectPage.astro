@@ -1,0 +1,91 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import SiteFooter from './SiteFooter.astro';
+import ProjectMedia from './ProjectMedia.astro';
+import LinkIcon from './LinkIcon.astro';
+import { site } from '../data/site';
+import type { Project } from '../data/projects';
+import { iconForLink } from '../lib/link-icon';
+
+/* Shared body for both /research/<slug> and /others/<slug>. The two
+   differ only in where "back" points, so they share everything else
+   rather than keeping two near-identical templates in sync. */
+interface Props {
+  project: Project;
+  backHref: string;
+  backLabel: string;
+}
+
+const { project, backHref, backLabel } = Astro.props;
+const detail = project.detail ?? {};
+
+/* A 4-digit year means a real venue and earns the amber badge;
+   descriptive labels like "Plugin · JavaScript" stay plain. */
+const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
+
+/* `href` is a repo for side projects and a project site for papers —
+   label it from the same tested inference the icons use. */
+const primaryLabel =
+  iconForLink({ label: '', href: project.href }) === 'code' ? 'Repository' : 'Project page';
+const links = [{ label: primaryLabel, href: project.href }, ...(detail.links ?? [])];
+---
+
+<SiteLayout title={`${project.name} — ${site.name}`} description={project.description}>
+  <div class="doc-page">
+    <main id="main">
+      <a class="doc-back" href={backHref}>
+        <span class="arrow" aria-hidden="true">←</span>
+        {backLabel}
+      </a>
+
+      <header class="doc-head paper-head">
+        <div class="paper-badges">
+          <span class:list={['research-venue', { 'is-plain': !isVenue(project.meta) }]}>
+            {project.meta}
+          </span>
+        </div>
+
+        <h1 class="doc-title">{project.name}</h1>
+
+        {detail.venueFull && <p class="paper-venue">{detail.venueFull}</p>}
+      </header>
+
+      {detail.media && <ProjectMedia media={detail.media} />}
+
+      <p class="paper-lede">{project.description}</p>
+
+      <ul class="paper-tags">
+        {project.tags.map((tag) => (
+          <li>{tag}</li>
+        ))}
+      </ul>
+
+      {/* Describes the project, not a list of personal contributions. */}
+      {detail.intro && detail.intro.length > 0 && (
+        <section class="paper-section reveal" aria-labelledby="about-project-heading">
+          <h2 class="paper-section-title" id="about-project-heading">About the project</h2>
+          <div class="paper-prose">
+            {detail.intro.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section class="paper-section reveal" aria-labelledby="links-heading">
+        <h2 class="paper-section-title" id="links-heading">Links</h2>
+        <div class="paper-links">
+          {links.map((link) => (
+            <a class="link-pill glass" href={link.href} target="_blank" rel="noopener noreferrer">
+              <LinkIcon name={iconForLink(link)} />
+              {link.label}
+              <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <SiteFooter />
+    </main>
+  </div>
+</SiteLayout>

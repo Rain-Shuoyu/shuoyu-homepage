@@ -15,35 +15,43 @@ const shown = projects.slice(0, limit);
 
 {/* No glass here on purpose: these rows stay flat hairlines so the
     research cards above them keep all the material weight. */}
-<section id="lab" class="reveal is-quiet" aria-labelledby="lab-heading">
+<section id="others" class="reveal is-quiet" aria-labelledby="others-heading">
   <SectionHeader
     index="03"
-    kicker="Lab"
+    kicker="Others"
     title="Side projects"
-    headingId="lab-heading"
+    headingId="others-heading"
     tone="quiet"
   />
 
   <ul class="lab-list">
-    {shown.map((project, i) => (
-      <li>
-        <a
-          class="lab-row"
-          href={project.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-labelledby={`lab-${project.slug}`}
-        >
-          <span class="lab-number" aria-hidden="true">
-            {String(i + 1).padStart(2, '0')}
-          </span>
+    {shown.map((project, i) => {
+      /* Inward to the write-up when there is one, otherwise straight
+         out to the repo — /others/<slug> only exists for projects with
+         an intro, so linking inward without one would 404. */
+      const hasPage = Boolean(project.detail?.intro?.length);
+      const href = hasPage ? `/others/${project.slug}` : project.href;
 
-          <h3 class="lab-name" id={`lab-${project.slug}`}>{project.name}</h3>
+      return (
+        <li>
+          <a
+            class="lab-row"
+            href={href}
+            target={hasPage ? undefined : '_blank'}
+            rel={hasPage ? undefined : 'noopener noreferrer'}
+            aria-labelledby={`lab-${project.slug}`}
+          >
+            <span class="lab-number" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
 
-          <span class="lab-meta">{project.meta}</span>
-          <p class="lab-desc">{project.description}</p>
-        </a>
-      </li>
-    ))}
+            <h3 class="lab-name" id={`lab-${project.slug}`}>{project.name}</h3>
+
+            <span class="lab-meta">{project.meta}</span>
+            <p class="lab-desc">{project.description}</p>
+          </a>
+        </li>
+      );
+    })}
   </ul>
 </section>

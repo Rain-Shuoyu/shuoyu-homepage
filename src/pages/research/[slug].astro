@@ -1,0 +1,20 @@
+---
+import ProjectPage from '../../components/ProjectPage.astro';
+import { researchProjects, type Project } from '../../data/projects';
+
+/* One page per research project, generated at build time. */
+export function getStaticPaths() {
+  return researchProjects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<ProjectPage project={project} backHref="/#research" backLabel="All research" />

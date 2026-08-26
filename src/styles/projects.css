@@ -137,9 +137,11 @@
     transform var(--dur) var(--ease);
 }
 
+/* Slides sideways, matching the rightward arrow — the diagonal travel
+   is reserved for links that leave the site. */
 .research-card:hover .research-arrow {
   color: var(--accent);
-  transform: translate(3px, -3px);
+  transform: translateX(4px);
 }
 
 /* Staggered entrance within the revealed section. */

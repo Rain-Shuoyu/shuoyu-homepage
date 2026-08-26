@@ -1,0 +1,47 @@
+---
+import type { ProjectMedia } from '../data/projects';
+
+interface Props {
+  media: ProjectMedia;
+}
+
+const { media } = Astro.props;
+---
+
+<figure class="project-media glass">
+  {media.kind === 'video' ? (
+    /* Muted and inline so it can autoplay as a teaser reel, but
+       autoplay itself is set by script only when the visitor has not
+       asked for reduced motion — see below. Controls stay available
+       either way. */
+    <video
+      class="project-media-el"
+      src={media.src}
+      poster={media.poster}
+      muted
+      loop
+      playsinline
+      controls
+      preload="metadata"
+      aria-label={media.alt}
+      data-autoplay-teaser
+    ></video>
+  ) : (
+    <img class="project-media-el" src={media.src} alt={media.alt} loading="lazy" decoding="async" />
+  )}
+</figure>
+
+<script>
+  /* Autoplay is opt-in per visitor: honouring prefers-reduced-motion
+     means a looping reel must not start on its own. Setting the
+     attribute here rather than in markup keeps the default safe. */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (const video of document.querySelectorAll<HTMLVideoElement>('[data-autoplay-teaser]')) {
+      video.autoplay = true;
+      video.play().catch(() => {
+        /* Blocked by a browser policy or power-saving mode; the poster
+           and controls are already in place, so nothing to do. */
+      });
+    }
+  }
+</script>

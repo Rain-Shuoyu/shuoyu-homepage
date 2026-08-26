@@ -60,6 +60,104 @@
   font-size: 0.85rem;
 }
 
+/* ---------- Research paper pages ---------- */
+
+.paper-head {
+  /* Badge row sits above the title, so the head needs a little more
+     room than the changelog's. */
+  padding-bottom: 1rem;
+}
+
+.paper-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.paper-venue {
+  margin-top: 0.6rem;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+/* ---------- Teaser media ---------- */
+
+.project-media {
+  margin: 1.4rem 0 0;
+  padding: 0.4rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* 16:9 keeps the glass frame from collapsing before the file loads,
+   so nothing below it jumps once dimensions are known. */
+.project-media-el {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: calc(var(--radius-lg) - 0.4rem);
+  background: var(--surface-2);
+  object-fit: cover;
+}
+
+/* Serif lede, echoing the treatment the home page gives its intro. */
+.paper-lede {
+  max-width: 54ch;
+  margin-top: 1.2rem;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.02rem + 0.45vw, 1.3rem);
+  line-height: 1.42;
+}
+
+.paper-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.paper-tags li {
+  padding: 0.18rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.735rem;
+}
+
+.paper-section {
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.paper-section-title {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.paper-prose {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 62ch;
+  margin-top: 0.9rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.paper-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+}
+
 /* ---------- Changelog entries ---------- */
 
 .changelog-list {

@@ -26,14 +26,14 @@ const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
   <ul class="research-list">
     {projects.map((project, i) => (
       <li>
-        {/* The whole card is the anchor, so no stretched pseudo-element
+        {/* Links inward to the project's own page rather than straight
+            out to the project site — the outbound link lives there.
+            The whole card is the anchor, so no stretched pseudo-element
             is needed under the glass layers. aria-labelledby keeps the
             accessible name to the title rather than every word inside. */}
         <a
           class="research-card glass glass-tint glass-lift"
-          href={project.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={`/research/${project.slug}`}
           aria-labelledby={`research-${project.slug}`}
           style={`--row-index:${i}`}
         >
@@ -50,7 +50,8 @@ const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
             <span class:list={['research-venue', { 'is-plain': !isVenue(project.meta) }]}>
               {project.meta}
             </span>
-            <span class="research-arrow" aria-hidden="true">↗</span>
+            {/* Rightward, not diagonal: this navigates within the site. */}
+            <span class="research-arrow" aria-hidden="true">→</span>
           </div>
 
           <p class="research-desc">{project.description}</p>
