@@ -194,108 +194,110 @@
 
 /* ---------- Author list ---------- */
 
+.paper-authors {
+  margin-top: 0.6rem;
+}
+
+.author-line {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
 .author-self {
   color: var(--ink);
   font-weight: 600;
 }
 
 .author-sep {
-  /* Keeps the separator from being read as part of a name. */
   color: var(--muted);
+}
+
+/* Superscript so a marker reads as an annotation, not part of the name. */
+.author-mark {
+  color: var(--amber);
+  font-size: 0.72em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.author-legend {
+  margin-top: 0.4rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.author-legend .author-mark {
+  /* Inline in the legend rather than raised, where it labels itself. */
+  vertical-align: baseline;
+  font-size: 0.9em;
+}
+
+.author-legend-sep {
+  color: var(--line-strong);
 }
 
 /* ---------- BibTeX ---------- */
 
+/* Plain by design: a hairline card, no glass and no disclosure, so it
+   reads as reference material rather than another surface. */
 .bibtex {
-  margin-top: 1rem;
-  border-radius: var(--radius);
-  overflow: hidden;
+  margin-top: 1.1rem;
+  padding: 0.8rem 0.9rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface-2) 60%, transparent);
 }
 
-.bibtex-summary {
+.bibtex-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.6rem;
-  padding: 0.6rem 0.9rem;
-  cursor: pointer;
-  /* Removes the default disclosure triangle; the chevron replaces it. */
-  list-style: none;
-}
-
-.bibtex-summary::-webkit-details-marker {
-  display: none;
+  gap: 0.7rem;
+  margin-bottom: 0.55rem;
 }
 
 .bibtex-label {
-  color: var(--ink-soft);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.bibtex-chevron {
-  display: grid;
-  place-items: center;
-  width: 1rem;
-  height: 1rem;
   color: var(--muted);
-  transition: transform var(--dur) var(--ease);
-}
-
-.bibtex-chevron svg {
-  width: 100%;
-  height: 100%;
-}
-
-.bibtex[open] .bibtex-chevron {
-  transform: rotate(180deg);
-}
-
-.bibtex-body {
-  position: relative;
-  padding: 0 0.9rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 /* Long entries scroll inside the block rather than widening the page. */
 .bibtex-code {
   margin: 0;
-  padding: 0.75rem 0.85rem;
   overflow-x: auto;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface-2);
   color: var(--ink-soft);
   font-family: var(--font-mono);
-  font-size: 0.735rem;
-  line-height: 1.6;
+  font-size: 0.72rem;
+  line-height: 1.65;
   tab-size: 2;
 }
 
 .bibtex-copy {
-  margin-top: 0.6rem;
-  padding: 0.35rem 0.8rem;
+  flex: none;
+  padding: 0.28rem 0.7rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--ink-soft);
+  background: transparent;
+  color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
   transition:
     border-color var(--dur) var(--ease),
-    color var(--dur) var(--ease),
-    background-color var(--dur) var(--ease);
+    color var(--dur) var(--ease);
 }
 
 .bibtex-copy:hover,
 .bibtex-copy:focus-visible {
   border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-  background: var(--accent-soft);
-  color: var(--accent-deep);
+  color: var(--accent);
 }
 
 /* ---------- Changelog entries ---------- */

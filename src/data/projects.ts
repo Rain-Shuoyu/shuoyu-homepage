@@ -4,6 +4,15 @@ import type { IconLink } from '../lib/link-icon';
    Self-host these: put the file in public/media/ and reference it as
    "/media/<file>". Hotlinking a video from another site is fragile —
    it can move, get rate-limited, or block cross-origin requests. */
+/* 'first' marks equal contribution / co-first authorship, 'corresponding'
+   the corresponding author. An author can hold both. */
+export type AuthorRole = 'first' | 'corresponding';
+
+export type Author = {
+  name: string;
+  roles?: AuthorRole[];
+};
+
 export type ProjectMedia = {
   kind: 'video' | 'image';
   src: string;
@@ -44,9 +53,12 @@ export type ProjectMedia = {
 export type ProjectDetail = {
   /* Acronym spelled out, e.g. "IEEE International Conference on ...". */
   venueFull?: string;
-  /* Full author list in publication order, comma separated. Rendered
-     with the site owner's own name emphasised. */
-  authors?: string;
+  /* Full author list in publication order. Roles carry the meaning;
+     the symbols and the legend are derived from them, because the three
+     source pages disagree on notation (one uses † for equal
+     contribution, another uses * for it) and the site should be
+     internally consistent. */
+  authors?: Author[];
   /* Verbatim BibTeX entry, shown in a copyable block. */
   bibtex?: string;
   media?: ProjectMedia;
@@ -82,8 +94,17 @@ export const researchProjects: Project[] = [
     href: 'https://isee-laboratory.github.io/OmniDexGrasp/',
     detail: {
       venueFull: 'IEEE International Conference on Robotics and Automation (ICRA), 2026',
-      authors:
-        'Yi-Lin Wei, Zhexi Luo, Yuhao Lin, Mu Lin, Zhizhao Liang, Shuoyu Chen, Wei-Shi Zheng',
+      /* Page marks Wei and Luo † (equal contribution) and Zheng *
+         (corresponding). */
+      authors: [
+        { name: 'Yi-Lin Wei', roles: ['first'] },
+        { name: 'Zhexi Luo', roles: ['first'] },
+        { name: 'Yuhao Lin' },
+        { name: 'Mu Lin' },
+        { name: 'Zhizhao Liang' },
+        { name: 'Shuoyu Chen' },
+        { name: 'Wei-Shi Zheng', roles: ['corresponding'] },
+      ],
       media: {
         kind: 'video',
         src: '/media/omnidexgrasp.mp4',
@@ -119,8 +140,25 @@ export const researchProjects: Project[] = [
     tags: ['Bimanual Manipulation', 'Data Generation'],
     href: 'https://frenkielm.github.io/BiDexGrasp.github.io/',
     detail: {
-      authors:
-        'Mu Lin, Yi-Lin Wei, Jiaxuan Chen, Yuhao Lin, Shuoyu Chen, Jiangran Lyu, Jiayi Chen, Yansong Tang, He Wang, Wei-Shi Zheng',
+      /* From the project page, which lists 13 authors — three more than
+         its own BibTeX entry, and in a different order. The page is the
+         fuller list and the one carrying the symbols, so it is used
+         here; the BibTeX below stays verbatim as published. */
+      authors: [
+        { name: 'Mu Lin', roles: ['first'] },
+        { name: 'Yi-Lin Wei', roles: ['first'] },
+        { name: 'Jiaxuan Chen' },
+        { name: 'Yuhao Lin' },
+        { name: 'Shuoyu Chen' },
+        { name: 'Zhizhao Liang' },
+        { name: 'Jiangran Lyu' },
+        { name: 'Jiayi Chen' },
+        { name: 'Xiaoyi Fan' },
+        { name: 'Chengyi Xing' },
+        { name: 'Yansong Tang' },
+        { name: 'He Wang' },
+        { name: 'Wei-Shi Zheng', roles: ['corresponding'] },
+      ],
       media: {
         kind: 'video',
         src: '/media/bidexgrasp.mp4',
@@ -155,8 +193,23 @@ export const researchProjects: Project[] = [
     tags: ['Dynamic Manipulation', 'Adaptive Policy'],
     href: 'https://liaohr9.github.io/DynamicManip/',
     detail: {
-      authors:
-        'Haoran Liao, Pengyue Wang, Shuoyu Chen, Kehan Cheng, Xuhang Chen, Yuhao Lin, Mu Lin, Zhizhao Liang, Xiaoyi Fan, Chengyi Xing, Dan Niu, Yi-Lin Wei, Wei-Shi Zheng',
+      /* Page marks Liao, Wang and Chen * (equal contribution) and names
+         no corresponding author, so none is claimed here. */
+      authors: [
+        { name: 'Haoran Liao', roles: ['first'] },
+        { name: 'Pengyue Wang', roles: ['first'] },
+        { name: 'Shuoyu Chen', roles: ['first'] },
+        { name: 'Kehan Cheng' },
+        { name: 'Xuhang Chen' },
+        { name: 'Yuhao Lin' },
+        { name: 'Mu Lin' },
+        { name: 'Zhizhao Liang' },
+        { name: 'Xiaoyi Fan' },
+        { name: 'Chengyi Xing' },
+        { name: 'Dan Niu' },
+        { name: 'Yi-Lin Wei' },
+        { name: 'Wei-Shi Zheng' },
+      ],
       media: {
         kind: 'video',
         src: '/media/dynamicmanip.mp4',

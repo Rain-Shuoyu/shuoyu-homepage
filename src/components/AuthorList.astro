@@ -1,24 +1,67 @@
 ---
 import { site } from '../data/site';
+import type { Author, AuthorRole } from '../data/projects';
 
 interface Props {
-  authors: string;
+  authors: Author[];
 }
 
 const { authors } = Astro.props;
 
-/* Emphasising one's own name in an author list is the academic
-   convention, and it is the fastest way for a reader to see the
-   position. Matched on the exact site name rather than a substring, so
-   another author sharing a surname is not marked. */
-const names = authors.split(',').map((name) => name.trim()).filter(Boolean);
+/* One notation for the whole site. The source pages disagree — one uses
+   † for equal contribution and * for corresponding, another the exact
+   reverse — so roles are stored semantically and rendered consistently
+   here instead. */
+const SYMBOL: Record<AuthorRole, string> = {
+  first: '*',
+  corresponding: '†',
+};
+
+const LABEL: Record<AuthorRole, string> = {
+  first: 'Equal contribution',
+  corresponding: 'Corresponding author',
+};
+
+/* Only explain the roles this paper actually uses — DynamicManip names
+   no corresponding author, so that line must not appear on its page. */
+const present: AuthorRole[] = (['first', 'corresponding'] as const).filter((role) =>
+  authors.some((author) => author.roles?.includes(role)),
+);
+
+const marks = (author: Author) =>
+  (author.roles ?? []).map((role) => SYMBOL[role]).join('');
 ---
 
-<p class="paper-authors">
-  {names.map((name, i) => (
-    <>
-      {i > 0 && <span class="author-sep">, </span>}
-      {name === site.name ? <strong class="author-self">{name}</strong> : <span>{name}</span>}
-    </>
-  ))}
-</p>
+<div class="paper-authors">
+  <p class="author-line">
+    {authors.map((author, i) => (
+      <>
+        {i > 0 && <span class="author-sep">, </span>}
+        {author.name === site.name ? (
+          <strong class="author-self">{author.name}</strong>
+        ) : (
+          <span>{author.name}</span>
+        )}
+        {/* aria-hidden: the legend below carries the meaning, and a
+            screen reader announcing a bare asterisk after every marked
+            name is noise. */}
+        {marks(author) && (
+          <span class="author-mark" aria-hidden="true">{marks(author)}</span>
+        )}
+      </>
+    ))}
+  </p>
+
+  {present.length > 0 && (
+    <p class="author-legend">
+      {present.map((role, i) => (
+        <>
+          {i > 0 && <span class="author-legend-sep"> · </span>}
+          <span class="author-mark">{SYMBOL[role]}</span>
+          {' '}
+          {LABEL[role]}
+        </>
+      ))}
+    </p>
+  )}
+</div>
