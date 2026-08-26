@@ -8,6 +8,15 @@ export type ChangelogEntry = {
    since commit subjects like "chore: initialize" are not reader-facing. */
 export const changelog: ChangelogEntry[] = [
   {
+    date: '2026-08-26',
+    title: 'Research project pages',
+    items: [
+      'Each research project now has its own page, so the cards open a summary on the site instead of jumping straight to an external link.',
+      'Each page opens with a teaser video or figure, followed by a short description of what the project is and how it works.',
+      'Research cards now use a rightward arrow that slides sideways, keeping the diagonal travel for links that leave the site.',
+    ],
+  },
+  {
     date: '2026-08-25',
     title: 'Liquid glass material',
     items: [
