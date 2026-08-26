@@ -232,6 +232,11 @@ export const researchProjects: Project[] = [
   },
 ];
 
+/* How many side projects the home page lists. Exported so LabList and
+   the content tests read the same number — a test comparing against a
+   hardcoded copy would pass while the page silently dropped an entry. */
+export const LAB_LIMIT = 3;
+
 export const labProjects: Project[] = [
   {
     slug: 'deep-sneak',
@@ -281,23 +286,5 @@ export const labProjects: Project[] = [
       ],
       links: [{ label: 'Project showcase', href: 'https://rain-shuoyu.github.io/PolyGo-Public/' }],
     },
-  },
-  {
-    slug: 'afterglow',
-    name: 'AfterGlow',
-    section: 'lab',
-    meta: 'App · Swift / Python',
-    description: 'A reflective journal tool with a shared Markdown diary format across macOS and terminal interfaces.',
-    tags: ['Personal Tools', 'Textual UI'],
-    href: 'https://github.com/Rain-Shuoyu/AfterGlow-AI-Powered-Reflective-Journal-Manager',
-  },
-  {
-    slug: 'neuralblock',
-    name: 'NeuralBlock',
-    section: 'lab',
-    meta: 'Tool · JavaScript',
-    description: 'A visual tool for designing and inspecting neural network architectures with React Flow.',
-    tags: ['Visualization', 'React Flow'],
-    href: 'https://github.com/Rain-Shuoyu/NeuralBlock',
   },
 ];

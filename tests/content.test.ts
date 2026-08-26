@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { site } from '../src/data/site';
-import { labProjects, researchProjects } from '../src/data/projects';
+import { LAB_LIMIT, labProjects, researchProjects } from '../src/data/projects';
 
 const isExternalUrl = (value: string) => /^https:\/\//.test(value);
 
@@ -26,16 +26,25 @@ describe('homepage content', () => {
       'DeepSneak',
       'TruthForge',
       'PolyGo',
-      'AfterGlow',
-      'NeuralBlock',
     ]);
     expect(labProjects.map((project) => project.slug)).toEqual([
       'deep-sneak',
       'truth-forge',
       'polygo',
-      'afterglow',
-      'neuralblock',
     ]);
+  });
+
+  /* LabList slices to a limit, so a project added beyond it would be
+     silently unreachable — /others/<slug> is only generated for entries
+     that have an intro, and the list only links inward for those. */
+  it('renders every lab project it defines', () => {
+    expect(labProjects.length).toBeLessThanOrEqual(LAB_LIMIT);
+  });
+
+  it('gives every lab project a reachable page', () => {
+    for (const project of labProjects) {
+      expect(project.detail?.intro?.length ?? 0).toBeGreaterThan(0);
+    }
   });
 
   it('has complete project records and external links', () => {
