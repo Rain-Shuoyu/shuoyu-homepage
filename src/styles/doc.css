@@ -151,6 +151,36 @@
   line-height: 1.6;
 }
 
+/* base.css resets anchors to inherit colour with no decoration, so an
+   inline link needs both restored or it is indistinguishable from the
+   surrounding text. Colour alone is not enough — the underline is what
+   identifies it without relying on colour perception. */
+.paper-prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  transition:
+    color var(--dur) var(--ease),
+    text-decoration-color var(--dur) var(--ease);
+}
+
+.paper-prose a:hover,
+.paper-prose a:focus-visible {
+  color: var(--accent-deep);
+  text-decoration-color: var(--accent);
+}
+
+/* Selectable fallback for the CV request address. */
+.cv-address {
+  margin-top: 1.1rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  user-select: all;
+}
+
 .paper-links {
   display: flex;
   flex-wrap: wrap;

@@ -7,9 +7,11 @@ import { site } from '../data/site';
 interface Props {
   title: string;
   description: string;
+  /* Keeps placeholder pages out of search results. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const canonical = Astro.site ?? new URL('https://shuoyu.me');
 const canonicalUrl = canonical.toString();
 /* One shared card for every page, resolved against the site origin so
@@ -26,6 +28,7 @@ const ogImageUrl = new URL('/og.png', canonical).toString();
     <meta id="theme-color" name="theme-color" content="#eaeef6" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <title>{title}</title>
     <meta property="og:site_name" content="Shuoyu Chen" />
     <meta property="og:title" content={title} />

@@ -14,9 +14,10 @@ export const site = {
   city: 'Guangzhou',
   countryCode: 'CN',
   github: 'https://github.com/Rain-Shuoyu',
-  /* Served from public/. ASCII filename on purpose — a non-ASCII one
-     needs percent-encoding in the href and is fragile across hosts. */
-  cv: '/cv-shuoyu-chen.pdf',
+  /* Points at an on-request page, not a file. The CV is deliberately not
+     published yet; nothing under public/ should carry personal detail
+     ahead of application season. */
+  cv: '/cv',
   email: 'shuoyu_chen@qq.com',
   description: 'Grounding intelligence in the physical world.',
   about: [

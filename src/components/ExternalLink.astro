@@ -1,10 +1,15 @@
 ---
+import LinkIcon from './LinkIcon.astro';
+import type { LinkIconName } from '../lib/link-icon';
+
 interface Props {
   href: string;
   label: string;
+  /* Omitted means no icon, so existing callers are unchanged. */
+  icon?: LinkIconName;
 }
 
-const { href, label } = Astro.props;
+const { href, label, icon } = Astro.props;
 const isHttpLink = /^https?:\/\//.test(href);
 /* A same-tab PDF navigates the visitor off the site, so open documents
    in a new tab too — but they are not outbound, so no ↗. */
@@ -18,6 +23,7 @@ const opensNewTab = isHttpLink || isDocument;
   target={opensNewTab ? '_blank' : undefined}
   rel={opensNewTab ? 'noopener noreferrer' : undefined}
 >
+  {icon && <LinkIcon name={icon} />}
   {label}
   {/* Outbound arrow only for real outbound links, not mailto: or a
       locally served document. */}

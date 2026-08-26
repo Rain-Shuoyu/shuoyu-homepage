@@ -1,0 +1,55 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { site } from '../data/site';
+
+/* Stands in for a published CV. Deliberately holds no personal detail
+   beyond what the home page already shows — the point is to keep the
+   sidebar link meaningful without putting a document online yet.
+
+   noindex because a placeholder has no business in search results. */
+
+/* Prefilled request. Per RFC 6068 the body's line breaks travel as
+   CRLF, which encodeURIComponent turns into %0D%0A. */
+const subject = 'CV request via shuoyu.me';
+const body = ['Hi Shuoyu,', '', 'Could you send me a copy of your CV?', '', 'Thanks,'].join(
+  '\r\n',
+);
+const requestHref = `mailto:${site.email}?subject=${encodeURIComponent(
+  subject,
+)}&body=${encodeURIComponent(body)}`;
+---
+
+<SiteLayout
+  title={`CV — ${site.name}`}
+  description="Curriculum vitae, available on request."
+  noindex
+>
+  <div class="doc-page">
+    <main id="main">
+      <a class="doc-back" href="/">
+        <span class="arrow" aria-hidden="true">←</span>
+        Back to home
+      </a>
+
+      <header class="doc-head">
+        <p class="doc-kicker">CV</p>
+        <h1 class="doc-title">Available on request</h1>
+      </header>
+
+      <div class="paper-prose">
+        <p>
+          My CV is not posted here for now — it carries more personal detail than I want
+          public outside of application season.
+        </p>
+        <p>
+          If you would like a copy, <a href={requestHref}>request it by email</a> and I will
+          send it over.
+        </p>
+      </div>
+
+      {/* Plain text fallback: mailto: does nothing when no mail client
+          is configured, and this page no longer has a copy button. */}
+      <p class="cv-address">{site.email}</p>
+    </main>
+  </div>
+</SiteLayout>
