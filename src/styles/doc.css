@@ -90,15 +90,19 @@
   overflow: hidden;
 }
 
-/* 16:9 keeps the glass frame from collapsing before the file loads,
-   so nothing below it jumps once dimensions are known. */
+/* Ratio comes from the file's own dimensions, so a 4:3 clip keeps its
+   shape instead of being cropped to a fixed 16:9. Reserving the height
+   up front also stops content below from jumping once the file loads.
+   object-fit: contain because letterboxing is preferable to cutting off
+   part of a figure. */
 .project-media-el {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: auto;
+  aspect-ratio: var(--media-ratio, 16 / 9);
   border-radius: calc(var(--radius-lg) - 0.4rem);
   background: var(--surface-2);
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* Serif lede, echoing the treatment the home page gives its intro. */
@@ -186,6 +190,112 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: 0.9rem;
+}
+
+/* ---------- Author list ---------- */
+
+.author-self {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.author-sep {
+  /* Keeps the separator from being read as part of a name. */
+  color: var(--muted);
+}
+
+/* ---------- BibTeX ---------- */
+
+.bibtex {
+  margin-top: 1rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.bibtex-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  /* Removes the default disclosure triangle; the chevron replaces it. */
+  list-style: none;
+}
+
+.bibtex-summary::-webkit-details-marker {
+  display: none;
+}
+
+.bibtex-label {
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.bibtex-chevron {
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted);
+  transition: transform var(--dur) var(--ease);
+}
+
+.bibtex-chevron svg {
+  width: 100%;
+  height: 100%;
+}
+
+.bibtex[open] .bibtex-chevron {
+  transform: rotate(180deg);
+}
+
+.bibtex-body {
+  position: relative;
+  padding: 0 0.9rem 0.9rem;
+}
+
+/* Long entries scroll inside the block rather than widening the page. */
+.bibtex-code {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.735rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.bibtex-copy {
+  margin-top: 0.6rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    background-color var(--dur) var(--ease);
+}
+
+.bibtex-copy:hover,
+.bibtex-copy:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-soft);
+  color: var(--accent-deep);
 }
 
 /* ---------- Changelog entries ---------- */

@@ -6,3 +6,9 @@ docs/superpowers/plans/
 .DS_Store
 # Keep documents with personal detail out of the repo entirely.
 *.pdf
+
+# Source videos dropped at the repo root; the transcoded,
+# web-safe copies live in public/media/ and are committed.
+/*.mp4
+/*.webm
+/*.mov

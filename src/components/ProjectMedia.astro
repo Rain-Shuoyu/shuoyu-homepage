@@ -6,42 +6,75 @@ interface Props {
 }
 
 const { media } = Astro.props;
+const ratio = `${media.width} / ${media.height}`;
 ---
 
-<figure class="project-media glass">
+<figure class="project-media glass" style={`--media-ratio:${ratio}`}>
   {media.kind === 'video' ? (
-    /* Muted and inline so it can autoplay as a teaser reel, but
-       autoplay itself is set by script only when the visitor has not
-       asked for reduced motion — see below. Controls stay available
-       either way. */
+    /* preload="none" plus poster: nothing downloads until the clip
+       scrolls into view, so a page visit does not pull megabytes for a
+       video the reader may never reach. The script below starts it.
+
+       Muted and inline so autoplay is permitted at all, but autoplay is
+       set by script rather than markup so prefers-reduced-motion can
+       suppress it. Controls stay available either way. */
     <video
       class="project-media-el"
       src={media.src}
       poster={media.poster}
+      width={media.width}
+      height={media.height}
       muted
       loop
       playsinline
       controls
-      preload="metadata"
+      preload="none"
       aria-label={media.alt}
-      data-autoplay-teaser
+      data-teaser
     ></video>
   ) : (
-    <img class="project-media-el" src={media.src} alt={media.alt} loading="lazy" decoding="async" />
+    <img
+      class="project-media-el"
+      src={media.src}
+      alt={media.alt}
+      width={media.width}
+      height={media.height}
+      loading="lazy"
+      decoding="async"
+    />
   )}
 </figure>
 
 <script>
-  /* Autoplay is opt-in per visitor: honouring prefers-reduced-motion
-     means a looping reel must not start on its own. Setting the
-     attribute here rather than in markup keeps the default safe. */
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    for (const video of document.querySelectorAll<HTMLVideoElement>('[data-autoplay-teaser]')) {
-      video.autoplay = true;
-      video.play().catch(() => {
-        /* Blocked by a browser policy or power-saving mode; the poster
-           and controls are already in place, so nothing to do. */
-      });
+  const teasers = document.querySelectorAll<HTMLVideoElement>('[data-teaser]');
+
+  if (teasers.length) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* Reduced motion: leave the poster and controls, download nothing. */
+    if (!reduced && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const video = entry.target as HTMLVideoElement;
+
+            if (!entry.isIntersecting) {
+              /* Offscreen: stop decoding rather than looping unseen. */
+              if (!video.paused) video.pause();
+              continue;
+            }
+
+            video.preload = 'auto';
+            video.play().catch(() => {
+              /* Blocked by a browser or power-saving policy; the poster
+                 and controls are already in place, so nothing to do. */
+            });
+          }
+        },
+        { threshold: 0.25 },
+      );
+
+      teasers.forEach((video) => io.observe(video));
     }
   }
 </script>
