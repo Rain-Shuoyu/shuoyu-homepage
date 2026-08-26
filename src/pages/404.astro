@@ -1,0 +1,38 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { site } from '../data/site';
+
+/* Builds to dist/404.html, which Cloudflare serves for unmatched
+   routes without any extra configuration. */
+const digits = ['4', '0', '4'];
+---
+
+<SiteLayout
+  title={`Page not found — ${site.name}`}
+  description="That page does not exist."
+>
+  <main class="error-page" id="main">
+    {/* Decorative: the heading below carries the actual message, so a
+        screen reader should not read out "4 0 4" first. */}
+    <div class="error-digits" aria-hidden="true">
+      {/* No .glass here: the material lives in the glyph itself, not in
+          a panel behind it — see error.css. */}
+      {digits.map((digit, i) => (
+        <div class="error-digit-slot" style={`--digit-index:${i}`}>
+          <span class="error-digit">{digit}</span>
+        </div>
+      ))}
+    </div>
+
+    <h1 class="error-title">Page not found</h1>
+
+    <p class="error-note">
+      The page you were after does not exist, or has moved since it was linked.
+    </p>
+
+    <a class="link-pill glass error-home" href="/">
+      <span class="arrow" aria-hidden="true">←</span>
+      Back to home
+    </a>
+  </main>
+</SiteLayout>

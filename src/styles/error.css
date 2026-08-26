@@ -1,0 +1,182 @@
+/* 404 page: three wide glass lozenges holding the digits, floating on
+   offset cycles. */
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(100% - (var(--gutter) * 2), var(--max-width));
+  min-height: 100vh;
+  min-height: 100svh;
+  margin-inline: auto;
+  padding-block: 3rem;
+  text-align: center;
+}
+
+/* Tighter than panels needed — glyphs sit closer than tiles do, and the
+   negative letter-spacing already pulls them in. */
+.error-digits {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.35rem, 1.2vw, 0.9rem);
+}
+
+/* The slot stays put and owns the ground shadow; only the panel inside
+   it rises. Animating the shadow on the moving element would carry the
+   shadow along with it and kill the sense of height. */
+.error-digit-slot {
+  position: relative;
+  animation: none;
+}
+
+/* Lighter than before: the glyph's own text-shadow now does most of the
+   separating, so this only needs to hint at ground contact. */
+.error-digit-slot::after {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -0.9rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--ink) 17%, transparent),
+    transparent 72%
+  );
+  content: '';
+  filter: blur(6px);
+  animation: digit-shadow 5.5s var(--ease) infinite;
+  animation-delay: calc(var(--digit-index) * 0.55s);
+}
+
+/* The glyph IS the glass — no panel behind it.
+
+   backdrop-filter cannot be clipped to a text shape, and a filter on an
+   ancestor would cut off any descendant's backdrop-filter by creating a
+   backdrop root. So the material is built instead from a translucent
+   white gradient clipped into the glyph, with text-shadow supplying the
+   rim and depth. text-shadow follows the glyph outline regardless of how
+   the fill is painted, so it still works with a clipped background and
+   transparent text colour. */
+.error-digit {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 17vw, 10.5rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1;
+
+  /* Bright at the top-left, dimmer through the middle, brightening
+     again toward the bottom-right — light wrapping around a solid. */
+  background-image: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.97) 0%,
+    rgba(255, 255, 255, 0.72) 26%,
+    rgba(255, 255, 255, 0.45) 52%,
+    rgba(255, 255, 255, 0.66) 74%,
+    rgba(255, 255, 255, 0.92) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    /* hairline rim, so the shape reads against a light backdrop */
+    0 1px 0 rgba(255, 255, 255, 0.55),
+    0 -1px 0 rgba(28, 40, 66, 0.16),
+    /* contact shadow keeping the glyph off the background */ 0 3px 7px
+      rgba(20, 30, 60, 0.17),
+    /* soft cast, giving it height */ 0 16px 34px rgba(20, 30, 60, 0.2);
+
+  animation: digit-float 5.5s var(--ease) infinite;
+  animation-delay: calc(var(--digit-index) * 0.55s);
+  will-change: transform;
+}
+
+/* Dark mode: the white glass needs less rim and a heavier cast. */
+:root[data-theme='dark'] .error-digit {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.3),
+    0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.5),
+    0 18px 38px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .error-digit {
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.3),
+      0 -1px 0 rgba(0, 0, 0, 0.4),
+      0 3px 8px rgba(0, 0, 0, 0.5),
+      0 18px 38px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* background-clip: text leaves the glyph invisible if the gradient does
+   not paint, so restore a solid fill where it is unsupported. */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .error-digit {
+    background-image: none;
+    color: var(--ink);
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+@keyframes digit-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.4deg);
+  }
+  50% {
+    transform: translateY(-13px) rotate(0.4deg);
+  }
+}
+
+/* Shadow tightens and darkens as the panel settles, spreads and fades
+   as it rises. */
+@keyframes digit-shadow {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.16);
+  }
+}
+
+.error-title {
+  margin-top: clamp(2.6rem, 5vw, 3.6rem);
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+}
+
+.error-note {
+  max-width: 40ch;
+  margin-top: 0.7rem;
+  color: var(--muted);
+  font-size: 0.925rem;
+}
+
+.error-home {
+  margin-top: 1.6rem;
+}
+
+/* Reversed: this arrow points back, not outward. */
+.error-home .arrow {
+  transition: transform var(--dur) var(--ease);
+}
+
+.error-home:hover .arrow,
+.error-home:focus-visible .arrow {
+  transform: translateX(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .error-digit,
+  .error-digit-slot::after {
+    animation: none;
+  }
+}
