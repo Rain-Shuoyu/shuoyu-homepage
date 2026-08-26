@@ -9,6 +9,16 @@ export type ChangelogEntry = {
 export const changelog: ChangelogEntry[] = [
   {
     date: '2026-08-26',
+    title: 'CV, share card, and a 404 page',
+    items: [
+      'Added a downloadable CV, linked from the sidebar.',
+      'Sharing the site now produces a preview card built from the same glass material as the pages themselves, rather than a bare title.',
+      'Added structured data so a search for the name resolves to this site, stating the institution, lab, and research areas explicitly.',
+      'Unmatched URLs now land on a 404 page whose digits float as glass panels, instead of the host’s default error page.',
+    ],
+  },
+  {
+    date: '2026-08-26',
     title: 'Research project pages',
     items: [
       'Each research project now has its own page, so the cards open a summary on the site instead of jumping straight to an external link.',
