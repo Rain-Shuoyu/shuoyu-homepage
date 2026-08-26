@@ -1,0 +1,61 @@
+---
+import type { LinkIconName } from '../lib/link-icon';
+
+interface Props {
+  name: LinkIconName;
+}
+
+const { name } = Astro.props;
+---
+
+{/* 1.7-weight strokes on a 24-box, matching ThemeToggle and CopyEmail.
+    Decorative: the adjacent label already names the destination. */}
+<svg
+  class="link-icon"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  {name === 'globe' && (
+    <>
+      <circle cx="12" cy="12" r="8.6" />
+      <path d="M3.5 12h17" />
+      <path d="M12 3.4a13 13 0 0 1 0 17.2 13 13 0 0 1 0-17.2Z" />
+    </>
+  )}
+
+  {name === 'paper' && (
+    <>
+      <path d="M6.4 2.9h7l4.2 4.2v14H6.4z" />
+      <path d="M13.2 2.9v4.4h4.4" />
+      <path d="M9.3 12.4h5.4M9.3 16.1h5.4" />
+    </>
+  )}
+
+  {name === 'archive' && (
+    <>
+      <path d="M3.4 6.8h17.2v3.1H3.4z" />
+      <path d="M5.1 9.9v10.2h13.8V9.9" />
+      <path d="M10 13.6h4" />
+    </>
+  )}
+
+  {name === 'code' && (
+    <>
+      <path d="M8.9 8.4 5 12l3.9 3.6" />
+      <path d="M15.1 8.4 19 12l-3.9 3.6" />
+      <path d="M13.4 5.6l-2.8 12.8" />
+    </>
+  )}
+
+  {name === 'video' && (
+    <>
+      <rect x="3.2" y="5.1" width="17.6" height="13.8" rx="2.4" />
+      <path d="M10.6 9.4l4.6 2.6-4.6 2.6z" />
+    </>
+  )}
+</svg>
