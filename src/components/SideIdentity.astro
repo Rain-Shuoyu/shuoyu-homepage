@@ -12,7 +12,9 @@ const nameParts = site.name.split(' ');
   aria-labelledby="identity-heading"
 >
   <div>
-    <p class="identity-eyebrow">{site.handle}</p>
+    {/* Purely a rule above the name — the handle text it used to carry
+        just restated the heading below it. */}
+    <p class="identity-eyebrow" aria-hidden="true"></p>
 
     <h1 class="identity-name" id="identity-heading">
       {nameParts.map((part) => <span>{part}</span>)}

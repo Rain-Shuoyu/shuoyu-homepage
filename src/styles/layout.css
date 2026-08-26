@@ -24,22 +24,20 @@
   border-radius: var(--radius-lg);
 }
 
+/* Now an empty element carrying only the rule below, so it needs a
+   height of its own — an empty flex box would collapse to nothing. */
 .identity-eyebrow {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  color: var(--amber);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  height: 1px;
 }
 
 .identity-eyebrow::after {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, var(--line-strong), transparent);
+  /* Starts amber at the left so the line keeps a trace of the accent
+     the handle text used to provide. */
+  background: linear-gradient(90deg, var(--amber-bright), var(--line-strong) 45%, transparent);
   content: '';
 }
 
