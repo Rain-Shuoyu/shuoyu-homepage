@@ -31,11 +31,10 @@
     transform 300ms var(--ease-spring);
 }
 
-/* Hidden while empty, so the live region stays silent until a message
-   is set and nothing invisible catches pointer events. */
-.toast:empty {
-  display: none;
-}
+/* Deliberately no `display: none` while empty. Toggling display on a
+   live region in the same task that sets its text makes some screen
+   readers skip the announcement. Opacity keeps it hidden, and
+   pointer-events: none on .toast-region already stops stray clicks. */
 
 .toast.is-visible {
   opacity: 1;
