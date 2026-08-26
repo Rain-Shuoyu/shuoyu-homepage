@@ -2,6 +2,8 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import SiteFooter from './SiteFooter.astro';
 import ProjectMedia from './ProjectMedia.astro';
+import AuthorList from './AuthorList.astro';
+import BibtexBlock from './BibtexBlock.astro';
 import LinkIcon from './LinkIcon.astro';
 import { site } from '../data/site';
 import type { Project } from '../data/projects';
@@ -47,6 +49,7 @@ const links = [{ label: primaryLabel, href: project.href }, ...(detail.links ?? 
 
         <h1 class="doc-title">{project.name}</h1>
 
+        {detail.authors && <AuthorList authors={detail.authors} />}
         {detail.venueFull && <p class="paper-venue">{detail.venueFull}</p>}
       </header>
 
@@ -83,6 +86,8 @@ const links = [{ label: primaryLabel, href: project.href }, ...(detail.links ?? 
             </a>
           ))}
         </div>
+
+        {detail.bibtex && <BibtexBlock bibtex={detail.bibtex} />}
       </section>
 
       <SiteFooter />

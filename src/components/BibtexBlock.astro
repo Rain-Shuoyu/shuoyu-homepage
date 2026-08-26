@@ -1,0 +1,81 @@
+---
+interface Props {
+  bibtex: string;
+}
+
+const { bibtex } = Astro.props;
+---
+
+{/* Collapsed by default: a reader wants the citation on demand, not
+    taking up the page. <details> gives the disclosure behaviour for
+    free, including keyboard support. */}
+<details class="bibtex glass">
+  <summary class="bibtex-summary">
+    <span class="bibtex-label">BibTeX</span>
+    <span class="bibtex-chevron" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 9.5l6 6 6-6" />
+      </svg>
+    </span>
+  </summary>
+
+  <div class="bibtex-body">
+    {/* The entry is pre-formatted text, so whitespace has to survive. */}
+    <pre class="bibtex-code"><code>{bibtex}</code></pre>
+
+    <button class="bibtex-copy" type="button" data-bibtex-copy>Copy</button>
+  </div>
+</details>
+
+<script>
+  /* Reuses the document-level toast mounted by SiteLayout. */
+  const toast = document.querySelector<HTMLElement>('[data-toast]');
+  let timer: number | undefined;
+
+  const flash = (message: string, ok: boolean) => {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.toggle('is-error', !ok);
+    /* Reflow between removing and re-adding, so a second copy replays
+       the transition instead of doing nothing. */
+    toast.classList.remove('is-visible');
+    void toast.offsetWidth;
+    toast.classList.add('is-visible');
+
+    clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      toast.classList.remove('is-visible');
+    }, 1800);
+  };
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-bibtex-copy]')) {
+    button.addEventListener('click', async () => {
+      const code = button.parentElement?.querySelector('code')?.textContent;
+      if (!code) return;
+
+      /* navigator.clipboard needs a secure context, so it is absent over
+         plain HTTP and in some in-app browsers. */
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(code);
+          flash('Citation copied', true);
+          return;
+        } catch {
+          /* Fall through to selecting the text instead. */
+        }
+      }
+
+      /* Select the entry so the manual shortcut works. */
+      const pre = button.parentElement?.querySelector('pre');
+      if (pre) {
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        const selection = getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+      }
+      flash('Press ⌘C to copy', false);
+    });
+  }
+</script>

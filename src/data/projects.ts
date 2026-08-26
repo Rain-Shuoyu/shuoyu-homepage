@@ -11,6 +11,11 @@ export type ProjectMedia = {
   alt: string;
   /* Videos only: still frame shown before playback starts. */
   poster?: string;
+  /* Intrinsic pixel size. Drives the frame's aspect ratio, so a 4:3
+     clip is letterboxed rather than cropped to a fixed 16:9, and
+     reserves height before the file loads so nothing below it jumps. */
+  width: number;
+  height: number;
 };
 
 /* Extra material shown only on a research project's own page at
@@ -39,6 +44,11 @@ export type ProjectMedia = {
 export type ProjectDetail = {
   /* Acronym spelled out, e.g. "IEEE International Conference on ...". */
   venueFull?: string;
+  /* Full author list in publication order, comma separated. Rendered
+     with the site owner's own name emphasised. */
+  authors?: string;
+  /* Verbatim BibTeX entry, shown in a copyable block. */
+  bibtex?: string;
   media?: ProjectMedia;
   /* One string per paragraph. */
   intro?: string[];
@@ -72,6 +82,22 @@ export const researchProjects: Project[] = [
     href: 'https://isee-laboratory.github.io/OmniDexGrasp/',
     detail: {
       venueFull: 'IEEE International Conference on Robotics and Automation (ICRA), 2026',
+      authors:
+        'Yi-Lin Wei, Zhexi Luo, Yuhao Lin, Mu Lin, Zhizhao Liang, Shuoyu Chen, Wei-Shi Zheng',
+      media: {
+        kind: 'video',
+        src: '/media/omnidexgrasp.mp4',
+        poster: '/media/omnidexgrasp.jpg',
+        alt: 'A dexterous robot hand grasping a series of household objects, adjusting its fingers as it makes contact.',
+        width: 960,
+        height: 720,
+      },
+      bibtex: `@article{wei2025omnidexgrasp,
+  title={OmniDexGrasp: Generalizable Dexterous Grasping via Foundation Model and Force Feedback},
+  author={Yi-Lin Wei and Zhexi Luo and Yuhao Lin and Mu Lin and Zhizhao Liang and Shuoyu Chen and Wei-Shi Zheng},
+  journal={arXiv preprint arXiv:2510.23119},
+  year={2025},
+}`,
       intro: [
         'OmniDexGrasp is a unified framework for generalizable dexterous grasping, driven entirely by grasp demonstrations that foundation generative models produce. It requires no robot data and no additional training.',
         'Instead of training a dedicated network to predict grasp poses, it aims for omni-ability across user prompts, embodiments, scenes, and tasks. Six functional settings are covered: semantic grasping, region and point grasping, cluttered scenes, one-shot demonstration grasping, human–robot handover, and fragile objects — taking language, visual prompts, or demonstration images as input.',
@@ -93,6 +119,25 @@ export const researchProjects: Project[] = [
     tags: ['Bimanual Manipulation', 'Data Generation'],
     href: 'https://frenkielm.github.io/BiDexGrasp.github.io/',
     detail: {
+      authors:
+        'Mu Lin, Yi-Lin Wei, Jiaxuan Chen, Yuhao Lin, Shuoyu Chen, Jiangran Lyu, Jiayi Chen, Yansong Tang, He Wang, Wei-Shi Zheng',
+      media: {
+        kind: 'video',
+        src: '/media/bidexgrasp.mp4',
+        poster: '/media/bidexgrasp.jpg',
+        alt: 'Two robot hands coordinating to grasp and lift objects of varying size and geometry.',
+        width: 1280,
+        height: 720,
+      },
+      bibtex: `@misc{lin2026bidexgraspcoordinatedbimanualdexterous,
+  title={BiDexGrasp: Coordinated Bimanual Dexterous Grasps across Object Geometries and Sizes},
+  author={Mu Lin and Yi-Lin Wei and Jiaxuan Chen and Yuhao Lin and Shuoyu Chen and Jiangran Lyu and Jiayi Chen and Yansong Tang and He Wang and Wei-Shi Zheng},
+  year={2026},
+  eprint={2604.06589},
+  archivePrefix={arXiv},
+  primaryClass={cs.RO},
+  url={https://arxiv.org/abs/2604.06589},
+}`,
       intro: [
         'BiDexGrasp pairs a large-scale bimanual dexterous grasp dataset with a generation model. Two-handed dexterous grasping is promising but constrained by the lack of comprehensive datasets and powerful generation models, compounded by the difficulty of high-dimensional bimanual grasping.',
         'The dataset is built by a bimanual grasp synthesis pipeline that efficiently annotates physically feasible data, using a two-stage strategy: region-based grasp initialization followed by decoupled force-closure grasp optimization. It spans 6,351 objects from 30 to 80 cm, with 9.7 million annotated grasps.',
@@ -110,6 +155,21 @@ export const researchProjects: Project[] = [
     tags: ['Dynamic Manipulation', 'Adaptive Policy'],
     href: 'https://liaohr9.github.io/DynamicManip/',
     detail: {
+      authors:
+        'Haoran Liao, Pengyue Wang, Shuoyu Chen, Kehan Cheng, Xuhang Chen, Yuhao Lin, Mu Lin, Zhizhao Liang, Xiaoyi Fan, Chengyi Xing, Dan Niu, Yi-Lin Wei, Wei-Shi Zheng',
+      media: {
+        kind: 'video',
+        src: '/media/dynamicmanip.mp4',
+        poster: '/media/dynamicmanip.jpg',
+        alt: 'A robot arm tracking and manipulating a moving object, correcting mid-motion as the target shifts.',
+        width: 1280,
+        height: 720,
+      },
+      bibtex: `@inproceedings{liao2026dynamicmanip,
+  title     = {DynamicManip: Enabling Dynamic Manipulation from a Single Static Demonstration},
+  author    = {Haoran Liao and Pengyue Wang and Shuoyu Chen and Kehan Cheng and Xuhang Chen and Yuhao Lin and Mu Lin and Zhizhao Liang and Xiaoyi Fan and Chengyi Xing and Dan Niu and Yi-Lin Wei and Wei-Shi Zheng},
+  year      = {2026}
+}`,
       intro: [
         'DynamicManip enables dynamic manipulation from a single static demonstration: it augments varied dynamic data from one static real-world demo, then trains a dynamic-aware policy for generalized execution.',
         'Robots need dynamic manipulation for moving objects and fast corrections, but two obstacles stand in the way. The combinatorial complexity of dynamic scenarios leads to substantial data requirements, and rapid variations in dynamics require real-time, accurate policy execution.',

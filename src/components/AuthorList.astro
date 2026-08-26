@@ -1,0 +1,24 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+  authors: string;
+}
+
+const { authors } = Astro.props;
+
+/* Emphasising one's own name in an author list is the academic
+   convention, and it is the fastest way for a reader to see the
+   position. Matched on the exact site name rather than a substring, so
+   another author sharing a surname is not marked. */
+const names = authors.split(',').map((name) => name.trim()).filter(Boolean);
+---
+
+<p class="paper-authors">
+  {names.map((name, i) => (
+    <>
+      {i > 0 && <span class="author-sep">, </span>}
+      {name === site.name ? <strong class="author-self">{name}</strong> : <span>{name}</span>}
+    </>
+  ))}
+</p>
