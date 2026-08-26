@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Source for public/og.png. Regenerate with `npm run og`.
+
+       Fonts are resolved by librsvg at build time, not by the viewer,
+       so this deliberately uses faces macOS ships (Georgia, Helvetica,
+       Menlo) rather than the site's Iowan Old Style stack. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eaeef6"/>
+      <stop offset="1" stop-color="#dfe5f1"/>
+    </linearGradient>
+
+    <radialGradient id="blobA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4a7efa" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#4a7efa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blobB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#a668fc" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#a668fc" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blobC" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fc9468" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#fc9468" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blobD" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#40d8d0" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#40d8d0" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Glass panel: translucent white over the blobs, with a bright
+         top-left rim fading toward the bottom-right. -->
+    <linearGradient id="panel" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="0.42" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.6"/>
+    </linearGradient>
+
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c08526"/>
+      <stop offset="1" stop-color="#2c5fa8"/>
+    </linearGradient>
+
+    <filter id="soften" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="34"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <g filter="url(#soften)">
+    <ellipse cx="190" cy="90" rx="430" ry="340" fill="url(#blobA)"/>
+    <ellipse cx="1010" cy="60" rx="380" ry="300" fill="url(#blobB)"/>
+    <ellipse cx="960" cy="580" rx="360" ry="290" fill="url(#blobC)"/>
+    <ellipse cx="150" cy="560" rx="330" ry="270" fill="url(#blobD)"/>
+  </g>
+
+  <g>
+    <rect x="72" y="72" width="1056" height="486" rx="34" fill="url(#panel)"/>
+    <rect x="72.5" y="72.5" width="1055" height="485" rx="33.5"
+          fill="none" stroke="url(#rim)" stroke-width="1.5"/>
+  </g>
+
+  <rect x="120" y="182" width="104" height="5" rx="2.5" fill="url(#accent)"/>
+
+  <text x="120" y="286" font-family="Georgia, 'Times New Roman', serif"
+        font-size="92" font-weight="600" letter-spacing="-3" fill="#151a24">Shuoyu Chen</text>
+
+  <text x="120" y="352" font-family="Georgia, 'Times New Roman', serif"
+        font-size="38" fill="#333c4b">Grounding intelligence in the physical world.</text>
+
+  <text x="120" y="424" font-family="Helvetica, Arial, sans-serif"
+        font-size="25" fill="#57616f">Undergraduate researcher &#183; Sun Yat-sen University &#183; iSEE Lab</text>
+
+  <text x="120" y="492" font-family="Menlo, monospace" font-size="21"
+        letter-spacing="2.5" fill="#8f5c10">SHUOYU.ME</text>
+</svg>
