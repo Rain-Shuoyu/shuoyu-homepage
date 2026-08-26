@@ -6,15 +6,20 @@ interface Props {
 
 const { href, label } = Astro.props;
 const isHttpLink = /^https?:\/\//.test(href);
+/* A same-tab PDF navigates the visitor off the site, so open documents
+   in a new tab too — but they are not outbound, so no ↗. */
+const isDocument = /\.pdf$/i.test(href);
+const opensNewTab = isHttpLink || isDocument;
 ---
 
 <a
   class="link-pill glass"
   href={href}
-  target={isHttpLink ? '_blank' : undefined}
-  rel={isHttpLink ? 'noopener noreferrer' : undefined}
+  target={opensNewTab ? '_blank' : undefined}
+  rel={opensNewTab ? 'noopener noreferrer' : undefined}
 >
   {label}
-  {/* Outbound arrow only for real outbound links, not mailto:. */}
+  {/* Outbound arrow only for real outbound links, not mailto: or a
+      locally served document. */}
   {isHttpLink && <span class="arrow" aria-hidden="true">↗</span>}
 </a>

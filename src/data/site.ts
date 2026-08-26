@@ -5,6 +5,9 @@ export const site = {
   affiliation: 'Sun Yat-sen University · iSEE Lab',
   location: 'Guangzhou, China',
   github: 'https://github.com/Rain-Shuoyu',
+  /* Served from public/. ASCII filename on purpose — a non-ASCII one
+     needs percent-encoding in the href and is fragile across hosts. */
+  cv: '/cv-shuoyu-chen.pdf',
   email: 'shuoyu_chen@qq.com',
   description: 'Grounding intelligence in the physical world.',
   about: [
