@@ -27,6 +27,26 @@ const ogImageUrl = new URL('/og.png', canonical).toString();
     <meta name="description" content={description} />
     <meta id="theme-color" name="theme-color" content="#eaeef6" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {/* Without these the fonts are only discovered once the stylesheet
+        has parsed, which delays the swap and lengthens the flash of
+        fallback text. Both faces are used above the fold — the serif in
+        the name, Inter in everything else — so both are worth
+        preloading. crossorigin is required on font preloads even
+        same-origin, or the fetch is made twice. */}
+    <link
+      rel="preload"
+      href="/fonts/source-serif-4-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="canonical" href={canonicalUrl} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <title>{title}</title>
