@@ -1,12 +1,12 @@
 ---
 import ProjectPage from '../../components/ProjectPage.astro';
-import { labProjects, type Project } from '../../data/projects';
+import { otherProjects, type Project } from '../../data/projects';
 
 /* Only side projects that actually have a write-up get a page. Without
-   this filter the others would build as empty shells, and LabList would
+   this filter the others would build as empty shells, and OthersList would
    link inward to a page with nothing on it. */
 export function getStaticPaths() {
-  return labProjects
+  return otherProjects
     .filter((project) => project.detail?.intro?.length)
     .map((project) => ({
       params: { slug: project.slug },

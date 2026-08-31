@@ -1,15 +1,15 @@
 ---
-import { LAB_LIMIT, type Project } from '../data/projects';
+import { OTHERS_LIMIT, type Project } from '../data/projects';
 import SectionHeader from './SectionHeader.astro';
 
 interface Props {
   projects: Project[];
-  /* Defaults to the shared LAB_LIMIT so the page and the content tests
+  /* Defaults to the shared OTHERS_LIMIT so the page and the content tests
      agree on the number. */
   limit?: number;
 }
 
-const { projects, limit = LAB_LIMIT } = Astro.props;
+const { projects, limit = OTHERS_LIMIT } = Astro.props;
 const shown = projects.slice(0, limit);
 ---
 
@@ -24,7 +24,7 @@ const shown = projects.slice(0, limit);
     tone="quiet"
   />
 
-  <ul class="lab-list">
+  <ul class="others-list">
     {shown.map((project, i) => {
       /* Inward to the write-up when there is one, otherwise straight
          out to the repo — /others/<slug> only exists for projects with
@@ -35,20 +35,20 @@ const shown = projects.slice(0, limit);
       return (
         <li>
           <a
-            class="lab-row"
+            class="others-row"
             href={href}
             target={hasPage ? undefined : '_blank'}
             rel={hasPage ? undefined : 'noopener noreferrer'}
-            aria-labelledby={`lab-${project.slug}`}
+            aria-labelledby={`others-${project.slug}`}
           >
-            <span class="lab-number" aria-hidden="true">
+            <span class="others-number" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </span>
 
-            <h3 class="lab-name" id={`lab-${project.slug}`}>{project.name}</h3>
+            <h3 class="others-name" id={`others-${project.slug}`}>{project.name}</h3>
 
-            <span class="lab-meta">{project.meta}</span>
-            <p class="lab-desc">{project.description}</p>
+            <span class="others-meta">{project.meta}</span>
+            <p class="others-desc">{project.description}</p>
           </a>
         </li>
       );

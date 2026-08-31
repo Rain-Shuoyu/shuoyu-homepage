@@ -40,7 +40,7 @@ export const changelog: ChangelogEntry[] = [
     date: '2026-08-25',
     title: 'Research-first hierarchy',
     items: [
-      'Made research the visual anchor of the page: full glass cards with a tinted fill, against a plain hairline list for side projects.',
+      'Made research the visual anchor of the page: full glass cards with a tinted fill, against a plain hairline list for Others.',
       'Trimmed side projects to the first three, with a link through to the rest on GitHub.',
       'Tightened vertical rhythm and narrowed the measure so the page reads as a dense document.',
       'Moved About above Selected work and gave it the full introduction.',
@@ -59,8 +59,8 @@ export const changelog: ChangelogEntry[] = [
     date: '2026-08-25',
     title: 'First build',
     items: [
-      'Set up a static Astro site with typed content for identity, research, and lab projects.',
-      'Rendered the split sidebar layout, research and lab sections, and external links.',
+      'Set up a static Astro site with typed content for identity, research, and Others projects.',
+      'Rendered the split sidebar layout, research and Others sections, and external links.',
       'Added accessibility and metadata passes, content invariant tests, and a deployment guide for Cloudflare.',
     ],
   },

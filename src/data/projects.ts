@@ -75,7 +75,7 @@ export type ProjectDetail = {
 export type Project = {
   slug: string;
   name: string;
-  section: 'research' | 'lab';
+  section: 'research' | 'others';
   meta: string;
   description: string;
   tags: string[];
@@ -139,7 +139,7 @@ export const researchProjects: Project[] = [
     slug: 'bidexgrasp',
     name: 'BiDexGrasp',
     section: 'research',
-    meta: 'Research Project',
+    meta: 'CoRL 2026 · Under Review',
     description: 'Coordinated bimanual dexterous grasping across objects with diverse geometries and sizes.',
     tags: ['Bimanual Manipulation', 'Data Generation'],
     href: 'https://frenkielm.github.io/BiDexGrasp.github.io/',
@@ -193,7 +193,7 @@ export const researchProjects: Project[] = [
     slug: 'dynamicmanip',
     name: 'DynamicManip',
     section: 'research',
-    meta: 'Research Project',
+    meta: 'NeurIPS 2026 · Under Review',
     description: 'A static-to-dynamic augmentation pipeline and adaptive policy for responsive dynamic manipulation.',
     tags: ['Dynamic Manipulation', 'Adaptive Policy'],
     href: 'https://liaohr9.github.io/DynamicManip/',
@@ -239,16 +239,16 @@ export const researchProjects: Project[] = [
   },
 ];
 
-/* How many side projects the home page lists. Exported so LabList and
+/* How many side projects the home page lists. Exported so OthersList and
    the content tests read the same number — a test comparing against a
    hardcoded copy would pass while the page silently dropped an entry. */
-export const LAB_LIMIT = 3;
+export const OTHERS_LIMIT = 3;
 
-export const labProjects: Project[] = [
+export const otherProjects: Project[] = [
   {
     slug: 'deep-sneak',
     name: 'DeepSneak',
-    section: 'lab',
+    section: 'others',
     meta: 'Plugin · JavaScript',
     description: 'A DeepSeek Harness plugin that pauses video playback when an agent needs attention.',
     tags: ['Agent Tools', 'Browser Automation'],
@@ -264,7 +264,7 @@ export const labProjects: Project[] = [
   {
     slug: 'truth-forge',
     name: 'TruthForge',
-    section: 'lab',
+    section: 'others',
     meta: 'Course project · Python',
     description: 'An open-source multi-agent fact-checking system built around traceable evidence and bounded retrieval.',
     tags: ['Multi-agent Systems', 'Retrieval'],
@@ -280,7 +280,7 @@ export const labProjects: Project[] = [
   {
     slug: 'polygo',
     name: 'PolyGo',
-    section: 'lab',
+    section: 'others',
     meta: 'Course project · Python',
     description: 'A collaborative travel-planning app for availability, meeting-point recommendations, and itineraries.',
     tags: ['Web Applications', 'AI Assistance'],

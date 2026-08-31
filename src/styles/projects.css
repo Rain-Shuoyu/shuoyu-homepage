@@ -1,9 +1,9 @@
 /* Two deliberately unequal treatments.
 
    Research cards are full glass panels — blur, specular ring, tinted
-   fill, pointer sheen, elastic lift. Lab rows get no glass at all:
+   fill, pointer sheen, elastic lift. Others rows get no glass at all:
    flat hairline separators, smaller type. The asymmetry is the
-   hierarchy, so don't promote the lab rows to glass. */
+   hierarchy, so don't promote the Others rows to glass. */
 
 /* ============ Research (primary) ============ */
 
@@ -159,14 +159,14 @@
   transform: none;
 }
 
-/* ============ Lab (secondary) ============ */
+/* ============ Others (secondary) ============ */
 
-.lab-list {
+.others-list {
   margin-top: 0.75rem;
   border-top: 1px solid var(--line);
 }
 
-.lab-row {
+.others-row {
   position: relative;
   display: grid;
   grid-template-columns: 1.6rem minmax(0, 1fr) auto;
@@ -196,7 +196,7 @@
 
    Tinted from --accent, so it follows the theme in both light and
    dark without extra tokens. */
-.lab-row::before {
+.others-row::before {
   position: absolute;
   z-index: 0;
   inset: 0.3rem -0.4rem;
@@ -209,26 +209,26 @@
   transition: opacity var(--dur) var(--ease);
 }
 
-.lab-row:hover::before,
-.lab-row:focus-visible::before {
+.others-row:hover::before,
+.others-row:focus-visible::before {
   opacity: 1;
 }
 
 /* Content sits above the highlight: a positioned pseudo-element with
    z-index 0 would otherwise paint over in-flow text. */
-.lab-row > * {
+.others-row > * {
   position: relative;
   z-index: 1;
 }
 
-.lab-number {
+.others-number {
   color: var(--line-strong);
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-variant-numeric: tabular-nums;
 }
 
-.lab-name {
+.others-name {
   min-width: 0;
   font-family: var(--font-body);
   font-size: 0.9rem;
@@ -238,11 +238,11 @@
   transition: color var(--dur) var(--ease);
 }
 
-.lab-row:hover .lab-name {
+.others-row:hover .others-name {
   color: var(--accent);
 }
 
-.lab-desc {
+.others-desc {
   grid-column: 2;
   max-width: 58ch;
   margin-top: 0.1rem;
@@ -251,7 +251,7 @@
   line-height: 1.45;
 }
 
-.lab-meta {
+.others-meta {
   grid-row: 1;
   grid-column: 3;
   color: var(--muted);
@@ -275,11 +275,11 @@
     margin-bottom: 0.15rem;
   }
 
-  .lab-row {
+  .others-row {
     grid-template-columns: 1.4rem minmax(0, 1fr);
   }
 
-  .lab-meta {
+  .others-meta {
     grid-row: auto;
     grid-column: 2;
     margin-top: 0.2rem;

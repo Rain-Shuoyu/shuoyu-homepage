@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { site } from '../src/data/site';
-import { LAB_LIMIT, labProjects, researchProjects } from '../src/data/projects';
+import { OTHERS_LIMIT, otherProjects, researchProjects } from '../src/data/projects';
 
 const isExternalUrl = (value: string) => /^https:\/\//.test(value);
 
@@ -22,6 +22,18 @@ describe('homepage content', () => {
     ]);
   });
 
+  it('uses Others as the public name for side projects', () => {
+    expect(site.navigation.map((item) => item.label)).toEqual(['About', 'Research', 'Others']);
+    expect(otherProjects.every((project) => project.section === 'others')).toBe(true);
+  });
+
+  it('keeps the approved research submission statuses', () => {
+    const bySlug = Object.fromEntries(researchProjects.map((project) => [project.slug, project]));
+
+    expect(bySlug.bidexgrasp.meta).toBe('CoRL 2026 · Under Review');
+    expect(bySlug.dynamicmanip.meta).toBe('NeurIPS 2026 · Under Review');
+  });
+
   it('includes the approved contribution summary for each research project', () => {
     const contributions = Object.fromEntries(
       researchProjects.map((project) => [project.slug, project.detail?.contribution]),
@@ -38,34 +50,34 @@ describe('homepage content', () => {
     );
   });
 
-  it('keeps the approved lab order and slugs', () => {
-    expect(labProjects.map((project) => project.name)).toEqual([
+  it('keeps the approved Others order and slugs', () => {
+    expect(otherProjects.map((project) => project.name)).toEqual([
       'DeepSneak',
       'TruthForge',
       'PolyGo',
     ]);
-    expect(labProjects.map((project) => project.slug)).toEqual([
+    expect(otherProjects.map((project) => project.slug)).toEqual([
       'deep-sneak',
       'truth-forge',
       'polygo',
     ]);
   });
 
-  /* LabList slices to a limit, so a project added beyond it would be
+  /* OthersList slices to a limit, so a project added beyond it would be
      silently unreachable — /others/<slug> is only generated for entries
      that have an intro, and the list only links inward for those. */
-  it('renders every lab project it defines', () => {
-    expect(labProjects.length).toBeLessThanOrEqual(LAB_LIMIT);
+  it('renders every Others project it defines', () => {
+    expect(otherProjects.length).toBeLessThanOrEqual(OTHERS_LIMIT);
   });
 
-  it('gives every lab project a reachable page', () => {
-    for (const project of labProjects) {
+  it('gives every Others project a reachable page', () => {
+    for (const project of otherProjects) {
       expect(project.detail?.intro?.length ?? 0).toBeGreaterThan(0);
     }
   });
 
   it('has complete project records and external links', () => {
-    const allProjects = [...researchProjects, ...labProjects];
+    const allProjects = [...researchProjects, ...otherProjects];
     const slugs = allProjects.map((project) => project.slug);
 
     expect(new Set(slugs).size).toBe(slugs.length);
