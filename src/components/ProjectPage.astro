@@ -63,6 +63,15 @@ const links = [{ label: primaryLabel, href: project.href }, ...(detail.links ?? 
         ))}
       </ul>
 
+      {detail.contribution && (
+        <section class="paper-section reveal" aria-labelledby="contribution-heading">
+          <h2 class="paper-section-title" id="contribution-heading">My contribution</h2>
+          <div class="paper-prose">
+            <p>{detail.contribution}</p>
+          </div>
+        </section>
+      )}
+
       {/* Describes the project, not a list of personal contributions. */}
       {detail.intro && detail.intro.length > 0 && (
         <section class="paper-section reveal" aria-labelledby="about-project-heading">

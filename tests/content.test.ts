@@ -8,6 +8,7 @@ describe('homepage content', () => {
   it('contains the approved identity and contact data', () => {
     expect(site.name).toBe('Shuoyu Chen');
     expect(site.affiliation).toContain('Sun Yat-sen University');
+    expect(site.expectedGraduation).toBe('2028');
     expect(site.github).toBe('https://github.com/Rain-Shuoyu');
     expect(site.email).toBe('shuoyu_chen@qq.com');
     expect(isExternalUrl(site.github)).toBe(true);
@@ -19,6 +20,22 @@ describe('homepage content', () => {
       'BiDexGrasp',
       'DynamicManip',
     ]);
+  });
+
+  it('includes the approved contribution summary for each research project', () => {
+    const contributions = Object.fromEntries(
+      researchProjects.map((project) => [project.slug, project.detail?.contribution]),
+    );
+
+    expect(contributions.omnidexgrasp).toBe(
+      'I contributed to implementing parts of the tooling, evaluating model performance, and filming the project videos.',
+    );
+    expect(contributions.bidexgrasp).toBe(
+      'I handled real-robot deployment and experimental evaluation.',
+    );
+    expect(contributions.dynamicmanip).toBe(
+      'I worked on simulation setup, model training, and model performance evaluation.',
+    );
   });
 
   it('keeps the approved lab order and slugs', () => {

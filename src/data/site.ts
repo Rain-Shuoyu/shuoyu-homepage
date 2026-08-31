@@ -4,6 +4,7 @@ export const site = {
   role: 'Undergraduate researcher',
   affiliation: 'Sun Yat-sen University · iSEE Lab',
   location: 'Guangzhou, China',
+  expectedGraduation: '2028',
   /* Structured counterparts to the two display strings above. The
      display strings stay human-readable; these carry the parts that
      JSON-LD needs as separate entities, so nothing has to parse a
