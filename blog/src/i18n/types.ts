@@ -1,5 +1,4 @@
 export const uiKeys = [
-  'navNotes',
   'navArchive',
   'navTags',
   'navAbout',
@@ -7,8 +6,6 @@ export const uiKeys = [
   'languageLabel',
   'themeLabel',
   'homeKicker',
-  'homeTitle',
-  'homeDescription',
   'published',
   'updated',
   'typePaperNotes',

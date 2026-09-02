@@ -19,11 +19,6 @@ export type TagSummary = {
   count: number;
 };
 
-export type YearGroup<T extends ContentPost = BlogPost> = {
-  year: number;
-  posts: T[];
-};
-
 export const normalizeTag = (tag: string): string => tag.trim().toLowerCase();
 
 export const publishedPosts = <T extends ContentPost>(posts: readonly T[]): T[] =>
@@ -39,23 +34,6 @@ export const postPath = <T extends Pick<BlogPost, 'id'>>({ id }: T): string =>
 
 export const tagPath = (tag: string) =>
   '/tags/' + encodeURIComponent(normalizeTag(tag));
-
-export const groupPostsByYear = <T extends ContentPost>(
-  posts: readonly T[],
-): YearGroup<T>[] => {
-  const groups = new Map<number, T[]>();
-
-  for (const post of publishedPosts(posts)) {
-    const year = post.data.pubDate.getUTCFullYear();
-    const group = groups.get(year) ?? [];
-    group.push(post);
-    groups.set(year, group);
-  }
-
-  return [...groups.entries()]
-    .sort(([left], [right]) => right - left)
-    .map(([year, groupedPosts]) => ({ year, posts: groupedPosts }));
-};
 
 export const getTagIndex = <T extends ContentPost>(posts: readonly T[]): TagSummary[] => {
   const entries = new Map<string, TagSummary>();

@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   output: 'static',
   site: 'https://blog.shuoyu.me',
+  redirects: { '/': '/archive' },
   integrations: [
     mdx(),
     sitemap({

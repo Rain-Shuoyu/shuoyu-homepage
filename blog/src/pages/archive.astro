@@ -1,11 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import ArchiveList from '../components/ArchiveList.astro';
 import BlogLayout from '../layouts/BlogLayout.astro';
-import { groupPostsByYear, publishedPosts } from '../lib/content';
+import PostList from '../components/PostList.astro';
+import { publishedPosts } from '../lib/content';
 
 const posts = publishedPosts(await getCollection('posts'));
-const groups = groupPostsByYear(posts);
 ---
 
 <BlogLayout
@@ -20,5 +19,5 @@ const groups = groupPostsByYear(posts);
       A chronological record of published notes.
     </p>
   </section>
-  <ArchiveList groups={groups} />
+  <PostList posts={posts} />
 </BlogLayout>

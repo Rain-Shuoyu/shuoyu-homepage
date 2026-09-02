@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type { BlogPost } from '../src/lib/post-types';
 import {
   getTagIndex,
-  groupPostsByYear,
   postPath,
   postsForTag,
   publishedPosts,
@@ -45,16 +44,6 @@ describe('blog content helpers', () => {
     ]);
   });
 
-  it('groups published posts by UTC publication year', () => {
-    expect(groupPostsByYear(posts).map((group) => ({
-      year: group.year,
-      ids: group.posts.map((post) => post.id),
-    }))).toEqual([
-      { year: 2026, ids: ['newest', 'same-day-a', 'same-day-b'] },
-      { year: 2025, ids: ['older'] },
-    ]);
-  });
-
   it('builds deterministic tag summaries and filters by normalized tag', () => {
     expect(getTagIndex(posts)).toEqual([
       { slug: 'learning', label: 'Learning', count: 3 },
@@ -81,15 +70,6 @@ describe('blog content helpers', () => {
       'newer',
       'older',
     ]);
-  });
-
-  it('groups dates by their UTC publication year', () => {
-    const postsAtBoundary = [
-      makePost('utc-new-year', '2025-12-31T23:30:00-05:00', ['time']),
-      makePost('utc-old-year', '2026-01-01T00:30:00-05:00', ['time']),
-    ];
-
-    expect(groupPostsByYear(postsAtBoundary).map((group) => group.year)).toEqual([2026]);
   });
 
   it('creates stable post and tag URLs', () => {

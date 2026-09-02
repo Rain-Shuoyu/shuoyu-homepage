@@ -1,7 +1,6 @@
 import type { UiDictionary } from './types';
 
 const en = {
-  navNotes: 'Notes',
   navArchive: 'Archive',
   navTags: 'Tags',
   navAbout: 'About',
@@ -9,8 +8,6 @@ const en = {
   languageLabel: 'Language',
   themeLabel: 'Toggle color theme',
   homeKicker: 'Personal archive',
-  homeTitle: 'Notes',
-  homeDescription: 'Paper notes, engineering practice, and learning materials.',
   published: 'Published',
   updated: 'Updated',
   typePaperNotes: 'Paper notes',
@@ -37,7 +34,7 @@ const en = {
   aboutBody: 'This blog collects paper notes, engineering practice, and learning materials. Articles are authored in Markdown or MDX and published through Git.',
   notFoundTitle: 'Page not found',
   notFoundDescription: 'The page you requested does not exist.',
-  backHome: 'Back to notes',
+  backHome: 'Back to archive',
   rssTitle: 'Shuoyu Chen — Notes',
 } satisfies UiDictionary;
 

@@ -1,7 +1,6 @@
 import type { UiDictionary } from './types';
 
 const zh = {
-  navNotes: '文章',
   navArchive: '归档',
   navTags: '标签',
   navAbout: '关于',
@@ -9,8 +8,6 @@ const zh = {
   languageLabel: '界面语言',
   themeLabel: '切换颜色主题',
   homeKicker: '个人资料库',
-  homeTitle: '文章',
-  homeDescription: '论文速读、工程实践和学习资料。',
   published: '发布于',
   updated: '更新于',
   typePaperNotes: '论文速读',
@@ -37,7 +34,7 @@ const zh = {
   aboutBody: '这里记录论文速读、工程实践和学习资料。文章使用 Markdown 或 MDX 编写，通过 Git 发布。',
   notFoundTitle: '页面不存在',
   notFoundDescription: '你访问的页面不存在。',
-  backHome: '返回文章列表',
+  backHome: '返回归档',
   rssTitle: 'Shuoyu Chen — 文章',
 } satisfies UiDictionary;
 
