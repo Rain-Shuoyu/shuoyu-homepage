@@ -1,6 +1,9 @@
 {
   "name": "shuoyu-me",
   "private": true,
+  "workspaces": [
+    "blog"
+  ],
   "type": "module",
   "engines": {
     "node": ">=22.12.0",
@@ -8,9 +11,14 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "dev:blog": "npm run dev --workspace blog",
     "test": "vitest run",
+    "test:all": "npm test && npm test --workspace blog",
     "check": "astro check",
+    "check:all": "npm run check && npm run check --workspace blog",
     "build": "astro check && astro build",
+    "build:blog": "npm run build --workspace blog",
+    "build:all": "npm run build && npm run build:blog",
     "preview": "astro preview",
     "og": "node scripts/build-og.mjs"
   },
