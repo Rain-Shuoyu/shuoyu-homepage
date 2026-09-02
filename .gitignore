@@ -2,6 +2,7 @@ node_modules/
 dist/
 .astro/
 .superpowers/
+.worktrees/
 docs/superpowers/plans/
 .DS_Store
 # Keep documents with personal detail out of the repo entirely.
