@@ -1,0 +1,126 @@
+---
+title: "Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents"
+description: "A paper note on using memory-guided LLM agents to turn frozen VLAs into retryable manipulation primitives."
+pubDate: 2026-09-02
+type: paper-notes
+tags:
+  - paper-reading
+  - robotics
+  - embodied-ai
+  - manipulation
+  - vla
+draft: false
+paper:
+  title: "Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents"
+  venue: arXiv preprint
+  year: 2026
+  url: https://arxiv.org/html/2607.08448v3
+links:
+  paper: https://arxiv.org/html/2607.08448v3
+translations:
+  zh:
+    title: "Harness VLA：通过记忆引导智能体将冻结 VLA 引导为可靠的操作原语"
+    description: "这篇笔记介绍如何用记忆引导的 LLM 智能体，把冻结的 VLA 变成可重试的操作原语，从而提升它在扰动和长时程任务中的可靠性。"
+---
+
+<section data-content-language="en">
+
+## The problem
+
+Pretrained vision-language-action (VLA) models are strong at local, contact-rich manipulation—irregular grasping, constrained placement, and fixture actuation that analytic controllers often struggle with. Their reliability, however, is tied closely to the training distribution. Under deployment perturbations such as instruction redirection, shuffled object layouts, or short skills that must be composed into long-horizon routines, monolithic VLAs can degrade sharply.
+
+On LIBERO-Pro, most strong baselines fall below 20% success under perturbation, while even the strongest frozen VLA reaches only 50% when deployed directly. The underlying issue is a mismatch in responsibility: one policy is expected to handle language grounding, task composition, spatial binding, and low-level control at once. Its behavior can therefore remain weakly conditioned on the instruction when the visual scene looks familiar, and one unstable contact can derail an entire long-horizon rollout. Fine-tuning would help, but requires expensive robot data.
+
+The paper asks: **can a frozen VLA remain reliable under semantic, spatial, and long-horizon perturbations without fine-tuning?**
+
+## The method
+
+The core idea is to **demote the VLA from the whole controller to one callable primitive, and give the remaining work to an LLM agent**. The system is built around three design choices.
+
+### Asymmetric division of labor
+
+The system uses one LLM planner and a small, fixed primitive library. Analytic primitives such as \`move_to\`, \`rotate\`, and \`set_gripper\` handle the non-contact structure: target grounding, free-space transport, posture adjustment, navigation, and release.
+
+The only learned primitive, \`vla_act\`, wraps the frozen VLA and is invoked only for fine contact-rich phases. Before each VLA call, the planner uses analytic primitives to stage the robot in a local observation that is familiar to the VLA. This narrows the frozen model's responsibility to the part of the task where its training distribution is actually informative.
+
+### Two kinds of memory
+
+The planner first explores one reference seed of a task and searches for a successful solution. It then stores two kinds of memory:
+
+- **Task-specific memory** keeps a solution skeleton—the ordering of primitive calls and the locations of VLA invocations. Coordinates are never replayed directly; spatial arguments are re-grounded from current visual observations at deployment time.
+- **Global memory** distills cross-task success rules and failure models. For example, “the gripper closed but the object did not move” indicates an empty grasp, so the robot should re-localize and re-stage before retrying.
+
+### Retryable closed-loop execution
+
+The planner issues one JSON primitive command at a time through a file-mediated REPL loop. After each command, it observes the result before deciding what to do next.
+
+Every VLA invocation is treated as a retryable local attempt: stage the robot, invoke the VLA, inspect the contact outcome, and re-stage if the attempt fails. A single unstable contact therefore does not have to ruin the entire rollout.
+
+## Results and ablations
+
+The same frozen VLAs are substantially more useful in this setup:
+
+- **LIBERO-Pro:** success improves from the frozen baseline's 50.0% to 82.4%, which is 38.6 percentage points above the strongest prior method.
+- **RoboCasa365:** the method exceeds the frozen baseline by 25.4 percentage points.
+- **RoboTwin C2R:** bimanual transfer reaches 58.4%.
+
+The ablations also support the proposed division of labor. Instruction redirection is handled mainly through the planner's online semantic re-binding, which reaches 79.0% even in the zero-shot setting. Spatial-layout adaptation depends more heavily on the structural skeleton stored in memory: removing memory drops success from 87.0% to 31.0%.
+
+## Why it matters
+
+The paper's most useful framing is that a frozen VLA does not need to be trusted with the entire task. It can be treated as a specialized contact primitive, while deterministic controllers and an LLM planner handle grounding, staging, composition, and recovery around it.
+
+That separation turns a brittle open-loop policy into a system with explicit checkpoints and retry points. It also suggests a practical way to extract more value from existing VLAs when new robot data or fine-tuning compute is limited.
+
+</section>
+
+<section data-content-language="zh" hidden>
+
+## 问题
+
+预训练视觉-语言-动作（VLA）模型擅长局部接触操作——不规则抓取、受限放置，以及解析控制器经常处理不好的机构操作。但它的可靠性高度依赖训练分布。部署时一旦出现指令重定向、物体布局变化，或者需要把短技能串成长时程任务，单体 VLA 的表现就可能大幅下降。
+
+在 LIBERO-Pro 上，大多数强基线在扰动下的成功率低于 20%，即使最强的冻结 VLA 直接部署也只有 50%。问题在于责任分配不合理：语言接地、任务组合、空间绑定和底层控制都被压在同一个策略里。视觉场景相似时，策略对指令的条件化可能很弱，重复训练期间的行为；一次不稳定的接触也可能让整条长时程轨迹失败。微调可以缓解这个问题，但需要昂贵的机器人数据。
+
+论文要回答的问题是：**能否在不微调 VLA 的前提下，让冻结的 VLA 在语义、空间和长时程扰动下依然可靠？**
+
+## 方法
+
+核心思路是：**把 VLA 从“整个控制器”降级为一个可调用的原语，把剩下的工作交给 LLM 智能体。** 整个系统由三个设计支撑。
+
+### 非对称分工
+
+系统使用一个 LLM planner 和一个固定的小原语库。解析原语（例如 \`move_to\`、\`rotate\` 和 \`set_gripper\`）负责非接触环节，包括目标定位、空间搬运、姿态调整、导航和松爪。
+
+唯一的学习型原语 \`vla_act\` 封装冻结的 VLA，只在需要精细接触的阶段被调用。每次调用 VLA 之前，planner 先用解析原语把机器人摆到 VLA 熟悉的局部观察位置，将冻结模型的责任压缩到训练分布真正有信息量的部分。
+
+### 两种记忆
+
+planner 先在任务的参考种子上自主探索，找到一条成功解，然后保存两层记忆：
+
+- **Task-specific memory** 保存解法骨架，也就是原语调用顺序和 VLA 的调用位置。坐标不会被直接回放，部署时所有空间参数都从当前视觉重新定位。
+- **Global memory** 提炼跨任务的成功规则与失败模型。例如，“夹爪闭合但物体没有移动”说明可能是空抓，需要重新定位并摆位后再试。
+
+### 可重试的闭环执行
+
+planner 通过文件介导的 REPL 循环逐条下发 JSON 原语命令。每条命令执行后，系统先观察结果，再决定下一步。
+
+每次 VLA 调用都被视为一次可重试的局部尝试：先摆位，再调用 VLA，检查接触结果；如果失败，就重新摆位再试，而不是让一次失败毁掉整个回放。
+
+## 实验结果与消融
+
+在这个系统中，同一批冻结 VLA 被显著“盘活”：
+
+- **LIBERO-Pro：** 成功率从冻结基线的 50.0% 提升到 82.4%，比最强已有方法高 38.6 个百分点。
+- **RoboCasa365：** 比冻结基线高 25.4 个百分点。
+- **RoboTwin C2R：** 双臂迁移成功率达到 58.4%。
+
+消融实验也支持这种分工。指令重定向主要依靠 planner 在线进行语义重绑定，即使零样本也能达到 79.0%；空间布局适应则更多依赖记忆中的结构骨架，去掉记忆后成功率从 87.0% 降到 31.0%。
+
+## 这篇论文的意义
+
+这篇论文最有价值的地方，是没有把冻结 VLA 当成必须独立解决整个任务的策略。它可以被当作一个专门处理接触阶段的操作原语，而目标定位、摆位、任务组合和失败恢复交给确定性控制器与 LLM planner。
+
+这种拆分为系统增加了明确的检查点和重试位置，让原本脆弱的开环策略变成可以恢复的闭环执行系统。在缺少新机器人数据或微调算力时，这也是挖掘现有 VLA 能力的一条实际路径。
+
+</section>

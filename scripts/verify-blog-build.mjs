@@ -5,6 +5,8 @@ const root = resolve(import.meta.dirname, '..');
 const requiredFiles = [
   'blog/dist/index.html',
   'blog/dist/posts/behavior-skill/index.html',
+  'blog/dist/posts/harness-vla/index.html',
+  'blog/dist/posts/realsense-piper-notes/index.html',
   'blog/dist/archive/index.html',
   'blog/dist/tags/index.html',
   'blog/dist/about/index.html',
@@ -25,6 +27,8 @@ const indexHtml = read('blog/dist/index.html');
 const archiveHtml = read('blog/dist/archive/index.html');
 const tagsHtml = read('blog/dist/tags/index.html');
 const articleHtml = read('blog/dist/posts/behavior-skill/index.html');
+const harnessVlaHtml = read('blog/dist/posts/harness-vla/index.html');
+const realsensePiperHtml = read('blog/dist/posts/realsense-piper-notes/index.html');
 const rssXml = read('blog/dist/rss.xml');
 const robotsTxt = read('blog/dist/robots.txt');
 const sitemapIndexXml = read('blog/dist/sitemap-index.xml');
@@ -48,8 +52,23 @@ if (!articleHtml.includes('data-content-language="zh"')) {
 if (!articleHtml.includes('Behavior-Skill：面向长时程任务中视觉-语言-动作策略评估的细粒度基准')) {
   throw new Error('Behavior-Skill article is missing its Chinese title.');
 }
+if (!harnessVlaHtml.includes('https://blog.shuoyu.me/posts/harness-vla')) {
+  throw new Error('Harness VLA article is missing its blog canonical URL.');
+}
+if (!harnessVlaHtml.includes('Harness VLA: Steering Frozen VLAs into Reliable Manipulation Primitives via Memory-Guided Agents')) {
+  throw new Error('Harness VLA article is missing its title.');
+}
+if (!harnessVlaHtml.includes('Harness VLA：通过记忆引导智能体将冻结 VLA 引导为可靠的操作原语')) {
+  throw new Error('Harness VLA article is missing its Chinese title.');
+}
+if (!realsensePiperHtml.includes('https://blog.shuoyu.me/posts/realsense-piper-notes')) {
+  throw new Error('RealSense / PiPER article is missing its blog canonical URL.');
+}
+if (!realsensePiperHtml.includes('深度相机与松灵机械臂使用经验总结')) {
+  throw new Error('RealSense / PiPER article is missing its title.');
+}
 
-const publicHtml = [indexHtml, archiveHtml, tagsHtml, articleHtml].join('\n');
+const publicHtml = [indexHtml, archiveHtml, tagsHtml, articleHtml, harnessVlaHtml, realsensePiperHtml].join('\n');
 const draftTitles = [
   'Example Paper Notes',
   'Example Engineering Note',
