@@ -11,9 +11,10 @@ const { tags } = Astro.props;
 <div class="tag-index">
   {tags.map((tag) => (
     <a class="tag-index-link" href={tagPath(tag.slug)}>
-      <span>{tag.label}</span>
+      <span class="tag-index-label">{tag.label}</span>
+      <span class="tag-index-count" aria-hidden="true">{tag.count}</span>
       <span
-        class="tag-index-count"
+        class="sr-only"
         data-i18n-key="articleCount"
         data-i18n-count={String(tag.count)}
       >{tag.count} articles</span>

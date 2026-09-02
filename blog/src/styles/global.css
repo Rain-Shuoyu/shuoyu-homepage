@@ -143,9 +143,12 @@ main,
 .archive-year { margin: 0 0 52px; }
 .archive-year-title { margin: 0 0 14px; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em; }
 .archive-year .post-list { padding-bottom: 0; }
-.tag-index { display: flex; flex-wrap: wrap; gap: 12px; max-width: var(--reading-width); padding-bottom: 96px; }
-.tag-index-link { padding: 12px 16px; border: 1px solid var(--line); border-radius: 8px; text-decoration: none; }
+.tag-index { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: var(--reading-width); padding-bottom: 96px; }
+.tag-index-link { position: relative; display: block; min-height: 72px; padding: 18px 54px 16px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); text-decoration: none; }
 .tag-index-link:hover, .tag-index-link:focus-visible { border-color: var(--accent); color: var(--accent); }
+.tag-index-label { display: block; font-family: var(--serif); font-size: 1.12rem; line-height: 1.25; overflow-wrap: anywhere; }
+.tag-index-count { position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; padding: 0 7px; border: 1px solid var(--accent-soft); border-radius: 999px; color: var(--accent); background: var(--accent-soft); font-family: var(--sans); font-size: 0.72rem; font-weight: 750; line-height: 1; }
+.tag-index-link:hover .tag-index-count, .tag-index-link:focus-visible .tag-index-count { border-color: var(--accent); color: var(--page); background: var(--accent); }
 
 .post-shell { width: min(100%, var(--reading-width)); margin: 0 auto; padding: 88px 0 96px; }
 .post-header { margin-bottom: 48px; }
