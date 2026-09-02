@@ -4,10 +4,9 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const requiredFiles = [
   'blog/dist/index.html',
-  'blog/dist/posts/about-this-archive/index.html',
+  'blog/dist/posts/behavior-skill/index.html',
   'blog/dist/archive/index.html',
   'blog/dist/tags/index.html',
-  'blog/dist/tags/meta/index.html',
   'blog/dist/about/index.html',
   'blog/dist/404.html',
   'blog/dist/rss.xml',
@@ -25,8 +24,7 @@ const read = (relativePath) => readFileSync(resolve(root, relativePath), 'utf8')
 const indexHtml = read('blog/dist/index.html');
 const archiveHtml = read('blog/dist/archive/index.html');
 const tagsHtml = read('blog/dist/tags/index.html');
-const metaTagHtml = read('blog/dist/tags/meta/index.html');
-const articleHtml = read('blog/dist/posts/about-this-archive/index.html');
+const articleHtml = read('blog/dist/posts/behavior-skill/index.html');
 const rssXml = read('blog/dist/rss.xml');
 const robotsTxt = read('blog/dist/robots.txt');
 const sitemapIndexXml = read('blog/dist/sitemap-index.xml');
@@ -38,14 +36,14 @@ const sitemapXml = sitemapIndexXml + '\n' + sitemapPageXml;
 if (!indexHtml.includes('https://blog.shuoyu.me/')) {
   throw new Error('Blog home is missing the blog canonical origin.');
 }
-if (!articleHtml.includes('https://blog.shuoyu.me/posts/about-this-archive')) {
+if (!articleHtml.includes('https://blog.shuoyu.me/posts/behavior-skill')) {
   throw new Error('Article page is missing its blog canonical URL.');
 }
 if (!articleHtml.includes('application/ld+json')) {
   throw new Error('Article page is missing BlogPosting JSON-LD.');
 }
 
-const publicHtml = [indexHtml, archiveHtml, tagsHtml, metaTagHtml, articleHtml].join('\n');
+const publicHtml = [indexHtml, archiveHtml, tagsHtml, articleHtml].join('\n');
 const draftTitles = [
   'Example Paper Notes',
   'Example Engineering Note',

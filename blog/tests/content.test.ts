@@ -93,8 +93,8 @@ describe('blog content helpers', () => {
   });
 
   it('creates stable post and tag URLs', () => {
-    const post = makePost('about-this-archive', '2026-09-02', ['Meta']);
-    expect(postPath({ id: post.id })).toBe('/posts/about-this-archive');
+    const post = makePost('behavior-skill', '2026-08-29', ['Paper Notes']);
+    expect(postPath({ id: post.id })).toBe('/posts/behavior-skill');
     expect(tagPath('Paper Notes')).toBe('/tags/paper%20notes');
   });
 });
