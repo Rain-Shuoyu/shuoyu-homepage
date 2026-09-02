@@ -1,0 +1,17 @@
+---
+import PostList from './PostList.astro';
+import type { AstroBlogPost, YearGroup } from '../lib/content';
+
+interface Props {
+  groups: readonly YearGroup<AstroBlogPost>[];
+}
+
+const { groups } = Astro.props;
+---
+
+{groups.map((group) => (
+  <section class="archive-year">
+    <h2 class="archive-year-title">{group.year}</h2>
+    <PostList posts={group.posts} />
+  </section>
+))}

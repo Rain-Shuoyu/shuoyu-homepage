@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getTagIndex, postsForTag, publishedPosts, tagPath, type TagSummary } from '../../lib/content';
+
+type PostEntry = CollectionEntry<'posts'>;
+
+interface Props {
+  tag: TagSummary;
+  posts: PostEntry[];
+}
+
+export async function getStaticPaths() {
+  const posts = publishedPosts(await getCollection('posts'));
+  const tags = getTagIndex(posts);
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: { tag, posts: postsForTag(posts, tag.slug) },
+  }));
+}
+
+const { tag, posts: tagPosts } = Astro.props;
+---
+
+<BlogLayout
+  title={tag.label + ' — Shuoyu Chen'}
+  description={'Notes tagged ' + tag.label + '.'}
+  canonicalPath={tagPath(tag.slug)}
+>
+  <section class="page-intro">
+    <p class="page-kicker" data-i18n-key="tagsTitle">Tags</p>
+    <h1 class="page-title">{tag.label}</h1>
+    <p class="page-description" data-i18n-key="articleCount" data-i18n-count={String(tag.count)}>
+      {tag.count} articles
+    </p>
+  </section>
+  <PostList posts={tagPosts} />
+</BlogLayout>

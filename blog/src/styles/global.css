@@ -137,7 +137,8 @@ main,
 .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 0; padding: 0; list-style: none; }
 .tag-link { padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 0.75rem; text-decoration: none; }
 .tag-link:hover, .tag-link:focus-visible { border-color: var(--accent); color: var(--accent); }
-.empty-state { max-width: var(--reading-width); padding-bottom: 96px; color: var(--muted); }
+.empty-state { max-width: var(--reading-width); padding: 28px 0 96px; border-top: 1px solid var(--line); color: var(--muted); }
+.reading-width { max-width: var(--reading-width); }
 
 .archive-year { margin: 0 0 52px; }
 .archive-year-title { margin: 0 0 14px; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em; }

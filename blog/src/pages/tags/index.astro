@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import TagList from '../../components/TagList.astro';
+import { getTagIndex, publishedPosts } from '../../lib/content';
+
+const posts = publishedPosts(await getCollection('posts'));
+const tags = getTagIndex(posts);
+---
+
+<BlogLayout
+  title="Tags — Shuoyu Chen"
+  description="Browse the archive by topic."
+  canonicalPath="/tags"
+>
+  <section class="page-intro">
+    <p class="page-kicker" data-i18n-key="homeKicker">Personal archive</p>
+    <h1 class="page-title" data-i18n-key="tagsTitle">Tags</h1>
+    <p class="page-description" data-i18n-key="tagsDescription">
+      Browse the archive by topic.
+    </p>
+  </section>
+  <TagList tags={tags} />
+</BlogLayout>

@@ -1,0 +1,19 @@
+---
+import BlogLayout from '../layouts/BlogLayout.astro';
+---
+
+<BlogLayout
+  title="Page not found — Shuoyu Chen"
+  description="The page you requested does not exist."
+  canonicalPath="/404"
+  noindex
+>
+  <section class="page-intro">
+    <p class="page-kicker">404</p>
+    <h1 class="page-title" data-i18n-key="notFoundTitle">Page not found</h1>
+    <p class="page-description" data-i18n-key="notFoundDescription">
+      The page you requested does not exist.
+    </p>
+    <p><a href="/" data-i18n-key="backHome">Back to notes</a></p>
+  </section>
+</BlogLayout>

@@ -19,15 +19,35 @@ npm run check
 npm run build
 ```
 
+## Blog development
+
+Run the homepage and blog independently:
+
+```sh
+npm run dev
+npm run dev:blog
+```
+
+Run repository-wide validation:
+
+```sh
+npm run test:all
+npm run check:all
+npm run build:all
+npm run verify:blog-build
+```
+
 ## Cloudflare Pages
 
-Configure the project with these settings:
+Both sites use the same Git repository and the `main` branch.
 
-- Production branch: `main`
-- Framework preset: `Astro`
-- Build command: `npm run build`
-- Build directory: `dist`
+Use the Astro framework preset and a Node.js version compatible with the engines declared in package.json.
 
-The site uses static output and does not need an adapter, database, runtime secret, or server function. The supported runtime declared in `package.json` is Node `>=22.12.0` and npm `>=9.6.5`; Cloudflare Pages should use a compatible Node version.
+| Project | Build command | Build directory | Domain |
+| --- | --- | --- | --- |
+| Homepage | `npm run build` | `dist` | `shuoyu.me` |
+| Blog | `npm run build:blog` | `blog/dist` | `blog.shuoyu.me` |
 
-After domain review completes, configure `shuoyu.me` as the custom domain.
+The blog Pages project must use the repository root as its working directory, execute `npm run build:blog`, and publish `blog/dist`. It must not use the homepage `dist` directory.
+
+Both sites use static output and do not need an adapter, database, runtime secret, or server function.

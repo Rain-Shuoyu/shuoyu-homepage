@@ -4,7 +4,6 @@ import type { CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import { publishedPosts } from '../../lib/content';
 
-const posts = publishedPosts(await getCollection('posts'));
 type PostEntry = CollectionEntry<'posts'>;
 
 interface Props {
@@ -13,7 +12,8 @@ interface Props {
   older?: PostEntry;
 }
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const posts = publishedPosts(await getCollection('posts'));
   return posts.map((post, index) => ({
     params: { slug: post.id },
     props: { post, newer: posts[index - 1], older: posts[index + 1] },

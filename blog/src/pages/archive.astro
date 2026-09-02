@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import ArchiveList from '../components/ArchiveList.astro';
+import BlogLayout from '../layouts/BlogLayout.astro';
+import { groupPostsByYear, publishedPosts } from '../lib/content';
+
+const posts = publishedPosts(await getCollection('posts'));
+const groups = groupPostsByYear(posts);
+---
+
+<BlogLayout
+  title="Archive — Shuoyu Chen"
+  description="A chronological record of published notes."
+  canonicalPath="/archive"
+>
+  <section class="page-intro">
+    <p class="page-kicker" data-i18n-key="homeKicker">Personal archive</p>
+    <h1 class="page-title" data-i18n-key="archiveTitle">Archive</h1>
+    <p class="page-description" data-i18n-key="archiveDescription">
+      A chronological record of published notes.
+    </p>
+  </section>
+  <ArchiveList groups={groups} />
+</BlogLayout>

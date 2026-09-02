@@ -1,0 +1,23 @@
+---
+import BlogLayout from '../layouts/BlogLayout.astro';
+---
+
+<BlogLayout
+  title="About — Shuoyu Chen"
+  description="How this archive is organized."
+  canonicalPath="/about"
+>
+  <section class="page-intro">
+    <p class="page-kicker" data-i18n-key="homeKicker">Personal archive</p>
+    <h1 class="page-title" data-i18n-key="aboutTitle">About</h1>
+    <p class="page-description" data-i18n-key="aboutDescription">
+      How this archive is organized.
+    </p>
+  </section>
+  <section class="prose reading-width">
+    <p data-i18n-key="aboutBody">
+      This blog collects paper notes, engineering practice, and learning materials.
+      Articles are authored in Markdown or MDX and published through Git.
+    </p>
+  </section>
+</BlogLayout>

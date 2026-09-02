@@ -1,0 +1,22 @@
+---
+import { tagPath, type TagSummary } from '../lib/content';
+
+interface Props {
+  tags: readonly TagSummary[];
+}
+
+const { tags } = Astro.props;
+---
+
+<div class="tag-index">
+  {tags.map((tag) => (
+    <a class="tag-index-link" href={tagPath(tag.slug)}>
+      <span>{tag.label}</span>
+      <span
+        class="tag-index-count"
+        data-i18n-key="articleCount"
+        data-i18n-count={String(tag.count)}
+      >{tag.count} articles</span>
+    </a>
+  ))}
+</div>

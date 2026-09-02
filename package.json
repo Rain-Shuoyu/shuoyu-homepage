@@ -19,6 +19,7 @@
     "build": "astro check && astro build",
     "build:blog": "npm run build --workspace blog",
     "build:all": "npm run build && npm run build:blog",
+    "verify:blog-build": "node scripts/verify-blog-build.mjs",
     "preview": "astro preview",
     "og": "node scripts/build-og.mjs"
   },
