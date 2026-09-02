@@ -16,6 +16,11 @@ export type PostLinks = {
   demo?: string;
 };
 
+export type PostTranslation = {
+  title: string;
+  description: string;
+};
+
 export type PostData = {
   title: string;
   description: string;
@@ -27,6 +32,9 @@ export type PostData = {
   cover?: string;
   paper?: PaperMeta;
   links?: PostLinks;
+  translations?: {
+    zh?: PostTranslation;
+  };
 };
 
 export type BlogPost = {

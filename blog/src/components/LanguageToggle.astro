@@ -55,6 +55,10 @@ import { dictionaries } from '../i18n';
       }).format(new Date(value));
     });
 
+    document.querySelectorAll('[data-content-language]').forEach((node) => {
+      node.toggleAttribute('hidden', node.getAttribute('data-content-language') !== language);
+    });
+
     document.querySelectorAll('[data-language]').forEach((button) => {
       button.setAttribute('aria-pressed', String(button.getAttribute('data-language') === language));
     });

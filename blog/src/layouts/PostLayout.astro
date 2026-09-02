@@ -16,6 +16,7 @@ interface Props {
 
 const { post, headings, newer, older } = Astro.props;
 const canonicalPath = postPath(post);
+const zhTranslation = post.data.translations?.zh;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -42,14 +43,28 @@ const jsonLd = {
   <article class="post-shell">
     <header class="post-header">
       <p class="page-kicker" data-i18n-key="homeKicker">Personal archive</p>
-      <h1 class="post-title">{post.data.title}</h1>
-      <p class="post-description">{post.data.description}</p>
+      <h1 class="post-title">
+        {zhTranslation ? (
+          <>
+            <span data-content-language="en">{post.data.title}</span>
+            <span data-content-language="zh" hidden>{zhTranslation.title}</span>
+          </>
+        ) : post.data.title}
+      </h1>
+      <p class="post-description">
+        {zhTranslation ? (
+          <>
+            <span data-content-language="en">{post.data.description}</span>
+            <span data-content-language="zh" hidden>{zhTranslation.description}</span>
+          </>
+        ) : post.data.description}
+      </p>
       <PostMeta post={post} />
     </header>
 
     {post.data.cover && <img class="post-cover" src={post.data.cover} alt={post.data.title} />}
     <PaperDetails paper={post.data.paper} links={post.data.links} />
-    <TableOfContents headings={headings} />
+    <TableOfContents headings={headings} bilingual={Boolean(zhTranslation)} />
     <div class="prose"><slot /></div>
 
     <footer class="post-footer">

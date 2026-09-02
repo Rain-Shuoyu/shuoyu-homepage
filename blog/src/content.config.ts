@@ -17,6 +17,11 @@ const linksSchema = z.object({
   demo: z.url().optional(),
 });
 
+const translationSchema = z.object({
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+});
+
 const postSchema = z.object({
   title: z.string().trim().min(1),
   description: z.string().trim().min(1),
@@ -28,6 +33,7 @@ const postSchema = z.object({
   cover: z.string().trim().min(1).optional(),
   paper: paperSchema.optional(),
   links: linksSchema.optional(),
+  translations: z.object({ zh: translationSchema.optional() }).optional(),
 });
 
 export const collections = {

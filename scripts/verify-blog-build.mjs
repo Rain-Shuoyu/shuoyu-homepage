@@ -42,6 +42,12 @@ if (!articleHtml.includes('https://blog.shuoyu.me/posts/behavior-skill')) {
 if (!articleHtml.includes('application/ld+json')) {
   throw new Error('Article page is missing BlogPosting JSON-LD.');
 }
+if (!articleHtml.includes('data-content-language="zh"')) {
+  throw new Error('Behavior-Skill article is missing its Chinese content variant.');
+}
+if (!articleHtml.includes('Behavior-Skill：面向长时程任务中视觉-语言-动作策略评估的细粒度基准')) {
+  throw new Error('Behavior-Skill article is missing its Chinese title.');
+}
 
 const publicHtml = [indexHtml, archiveHtml, tagsHtml, articleHtml].join('\n');
 const draftTitles = [

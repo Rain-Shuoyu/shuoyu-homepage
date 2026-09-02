@@ -16,7 +16,13 @@ paper:
   url: https://arxiv.org/abs/2608.30536
 links:
   paper: https://arxiv.org/abs/2608.30536
+translations:
+  zh:
+    title: "Behavior-Skill：面向长时程任务中视觉-语言-动作策略评估的细粒度基准"
+    description: "这篇笔记介绍 Behavior-Skill 如何把长时程 VLA 任务的失败拆解成技能级指标，帮助定位策略在哪一步失效。"
 ---
+
+<section data-content-language="en">
 
 ## The problem
 
@@ -70,7 +76,7 @@ The benchmark reports both trajectory-level completeness and category-level reli
 
 | Metric | Meaning |
 | --- | --- |
-| **TSCR** — Task Skill Completion Rate | The fraction of skills completed within one demonstration. `TSCR(τᵢ) = (1 / Mᵢ) Σⱼ yᵢⱼ`. It measures how much of a trajectory a policy can carry through. |
+| **TSCR** — Task Skill Completion Rate | The fraction of skills completed within one demonstration. TSCR(τᵢ) = (1 / Mᵢ) Σⱼ yᵢⱼ. It measures how much of a trajectory a policy can carry through. |
 | **STSR** — Skill-Type Success Rate | The average success rate for one semantic skill category across tasks. It describes the policy's capability profile. |
 
 TSCR answers “how much of this particular chain was completed?” STSR answers “how reliable is this type of skill across different chains?”
@@ -132,3 +138,124 @@ The experiments suggest that current VLA policies have less than 50% skill compl
 The benchmark focuses on skill execution. It does not evaluate task planning, automatic task decomposition, dependencies between skills, or real-robot validation. Those remain separate problems.
 
 The paper is best read as an evaluation infrastructure paper: before changing a policy, make sure the measurement can tell which part of the behavior is actually broken. Without that resolution, a single end-to-end success rate is too blunt to guide targeted training or to verify whether an intervention helped the intended skill.
+
+</section>
+
+<section data-content-language="zh" hidden>
+
+## 问题
+
+长时程机器人任务出了问题，往往很难定位。在 BEHAVIOR-1K 上，即使是目前报告的最佳策略，整体任务成功率也只有约 31%。任务级分数能告诉我们一条轨迹失败了，却不能说明失败发生在哪一步。
+
+这会带来三个实际问题：
+
+- 一条执行链里可能包含几十个原子技能，任何一个技能都可能成为失败点。前面的技能一旦失败，后面的技能就不会被执行，也就无法测出它们的能力。
+- 任务分数相近的两个策略，能力结构可能完全不同。一个可能擅长抓取、不擅长放置，另一个则可能正好相反。
+- 如果看不见真正的瓶颈，改进就只能靠猜：增加数据、调整架构，然后等待分数变化。
+
+Behavior-Skill 将这个问题归结为执行单位和评估单位不一致。长时程任务被当成一个整体来评估，但机器人实际执行的是一串技能。这个基准把评估粒度下移到了技能层面。
+
+## 三部分评估系统
+
+这个基准由三部分组成：技能数据集、中间状态恢复方法，以及用于汇总技能级结果的指标。
+
+### 1. 技能实例数据集
+
+作者将 BEHAVIOR-1K 中的 10,000 条人类遥操作示范自动切分成 235,492 个技能实例。数据覆盖 50 个家庭任务和 34 个语义技能类别，包括 Move To、Pick Up From、Pour 和 Open Lid。
+
+每个实例包含以下内容：
+
+- 根据 BEHAVIOR-1K 的结构化记录生成的技能指令，包括动作标签、物体 ID、时间区间、任务描述，以及用于恢复上下文的前置技能。
+- 多视角观测：头部相机、左腕相机和右腕相机。采样器会根据技能时长调整采样，单个技能最多取 64 个时间戳，并将三个视角合并成一条序列。
+- 对动作的自然语言总结。逐帧记录的 23-DoV 动作轨迹会被压缩成类似“左臂移动到位置 X，夹爪闭合”的描述，为语言模型判断执行质量提供依据。
+- 语义类别标签，便于按技能类型汇总结果。
+
+质量控制方面，作者为每个任务人工检查了一条参考示范。其余示范先由 ChatGPT-5 与参考示范进行比对，再将不一致的结果交回人工复核。得到的数据集也可以作为技能级训练数据重复使用。
+
+### 2. 中间状态恢复
+
+要独立评估一个技能，不能只把视频切成几段。仿真器必须回到目标技能开始执行时的准确状态。
+
+HDF5 记录中的 active-object filter 让这件事变得复杂：某个时刻处于非活动状态的物体可能不会被写入文件。直接加载这样的不完整快照，可能导致物理引擎报错。
+
+Behavior-Skill 用四步恢复状态：
+
+1. 从示范的初始状态出发，重放物体移动、状态变化等物理转移事件，直到目标技能对应的时间戳。
+2. 重建 OmniGibson 的辅助抓取约束，保证机器人手部可以正常与物体交互。
+3. 将恢复后的仿真器状态序列化成完整的中间快照，之后可以重复加载。
+4. 构造目标技能的 BDDL 符号化目标，并将其注入评估器。
+
+评估时长设为对应示范技能时长的两倍。每个交互步骤之后，BDDL 引擎都会检查当前状态是否满足目标谓词；一旦所有谓词都满足，评估立即结束，否则在时长耗尽时将技能判定为失败。
+
+这样一来，技能就不再只是记录轨迹中的一小段，而是变成了一个可以独立复现的测试用例。
+
+### 3. 两个互补指标
+
+这个基准同时报告轨迹完成度和类别可靠性：
+
+| 指标 | 含义 |
+| --- | --- |
+| **TSCR** — Task Skill Completion Rate | 一条示范中完成的技能比例。公式为 TSCR(τᵢ) = (1 / Mᵢ) Σⱼ yᵢⱼ，用于衡量策略能把一条执行链推进多远。 |
+| **STSR** — Skill-Type Success Rate | 某个语义技能类别在不同任务中的平均成功率，用于描述策略的能力分布。 |
+
+TSCR 回答的是“这条具体执行链完成了多少？”；STSR 回答的是“这种技能在不同执行链中有多可靠？”
+
+## 实验与发现
+
+论文评估了 π₀.₅ 和 GR00T N1.7。对于每个策略，作者分别训练了两种版本：一种使用任务指令，另一种使用技能指令；测试覆盖 50 个任务中的 500 条示范。
+
+### 即使单独评估技能，执行仍然困难
+
+即使从完全恢复的中间状态开始，并给予示范时长两倍的执行时间，技能执行仍然谈不上稳定。在使用技能指令训练时，π₀.₅ 的 TSCR 为 48.4%，GR00T N1.7 为 42.5%。相比之下，使用技能指令训练只带来了约 6 个百分点的提升。
+
+这说明，长时程任务的相当一部分瓶颈在技能执行层面就已经存在，并不只是规划或任务分解的问题。
+
+### 接触密集型技能是薄弱环节
+
+两个策略在 34 个类别上呈现出相当稳定的三档分布：
+
+- **成功率较高：** Move To、Hold、Release、Sweep Surface、Spray 和 Place Under 等简单的空间移动或状态维持技能。
+- **成功率居中：** Place On、Place In 和 Place Next To 等常规放置技能。
+- **成功率较低：** Open Lid、Close Door、Close Lid 等涉及可动部件的交互，Pick Up From 等需要精确抓取的技能，以及 Pour 等工具使用技能。
+
+两个策略的能力分布相似，更像是存在共同的交互瓶颈，而不是某个架构独有的问题。接触密度是一个合理的解释，但论文没有通过跨仿真引擎或跨机器人形态的实验验证这一因果判断。
+
+### 任务级分数会掩盖不少已经完成的内容
+
+在一些任务上，原始任务指标与 TSCR 之间存在明显差距：
+
+| 任务 | 原始 QScore | TSCR |
+| --- | ---: | ---: |
+| Wash a Baseball Cap | 0% | 80.0% |
+| Cook Hotdogs | 0% | 69.0% |
+| Make Microwave Popcorn | 10.0% | 75.0% |
+
+任务分数为 0%，并不代表策略什么都没有完成。更可能的情况是某个早期技能中断了执行链，使后续技能都没有机会被观测。技能级评估能把这些局部成功保留下来。
+
+### 同一个技能的难度会随上下文变化
+
+仅凭语义标签不能决定一个技能有多难。在一个包含 12 个任务的子集里，同一技能的成功率会随着物体几何、目标关系和周围场景的变化而大幅波动：
+
+- **Open Door：** 在微波炉爆米花任务中为 9.0%，在烹饪热狗任务中为 78.0%。
+- **Place In：** 将鞋子放入置物架时为 15.2%，在烹饪热狗任务中为 88.0%。
+
+这对评估和数据收集都很重要。类别平均值有参考价值，但不能把它当成与上下文无关的技能难度指标。
+
+## 这个基准的贡献
+
+Behavior-Skill 有四点具体贡献：
+
+1. 用可复现的技能级评估单位替代了黑盒式的任务分数。
+2. 提供了覆盖 50 个任务、34 个技能类别的 235,492 个标注技能实例。
+3. 恢复中间仿真状态，并提供 BDDL 目标，从而可以独立检查每个技能。
+4. 将 TSCR 和 STSR 结合起来，让我们既能从轨迹执行器的角度看策略，也能看到它在不同技能上的能力分布。
+
+实验表明，即使在相对有利的评估条件下，当前 VLA 策略的技能完成率仍低于 50%。主要弱点集中在接触密集型交互上，而任务级指标会系统性低估策略在第一次失败之前已经完成的部分。
+
+## 范围与局限
+
+这个基准关注技能执行，不评估任务规划、自动任务分解、技能之间的依赖关系，也没有进行真实机器人验证。这些仍然是独立的问题。
+
+这篇论文更适合被看作一套评估基础设施：在修改策略之前，先确保测量方法能指出行为究竟在哪一部分出了问题。缺少这样的分辨率，单一的端到端成功率就很难指导有针对性的训练，也无法确认一次改动是否真的改善了目标技能。
+
+</section>

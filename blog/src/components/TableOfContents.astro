@@ -3,17 +3,32 @@ import type { MarkdownHeading } from 'astro';
 
 interface Props {
   headings: MarkdownHeading[];
+  bilingual?: boolean;
 }
 
-const visibleHeadings = Astro.props.headings.filter((heading) => heading.depth <= 3);
+const { headings, bilingual = false } = Astro.props;
+const visibleHeadings = headings.filter((heading) => heading.depth <= 3);
+const splitAt = bilingual && visibleHeadings.length % 2 === 0
+  ? visibleHeadings.length / 2
+  : 0;
+const entries = visibleHeadings.map((heading, index) => ({
+  heading,
+  language: splitAt > 0 ? (index < splitAt ? 'en' : 'zh') : undefined,
+}));
 ---
 
-{visibleHeadings.length > 0 && (
+{entries.length > 0 && (
   <nav class="table-of-contents" aria-label="On this page" data-i18n-aria-label="tableOfContents">
     <p class="page-kicker" data-i18n-key="tableOfContents">On this page</p>
     <ol>
-      {visibleHeadings.map((heading) => (
-        <li class={'toc-depth-' + heading.depth}><a href={'#' + heading.slug}>{heading.text}</a></li>
+      {entries.map(({ heading, language }) => (
+        <li
+          class={'toc-depth-' + heading.depth}
+          data-content-language={language}
+          hidden={language === 'zh'}
+        >
+          <a href={'#' + heading.slug}>{heading.text}</a>
+        </li>
       ))}
     </ol>
   </nav>
