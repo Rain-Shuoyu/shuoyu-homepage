@@ -1,0 +1,14 @@
+.prose { font-family: var(--serif); font-size: 1.12rem; line-height: 1.78; }
+.prose > :first-child { margin-top: 0; }
+.prose h2, .prose h3, .prose h4 { margin: 2.2em 0 0.65em; color: var(--ink); font-family: var(--sans); line-height: 1.2; }
+.prose h2 { font-size: 1.55rem; }
+.prose h3 { font-size: 1.25rem; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose table, .prose pre { margin: 1.15em 0; }
+.prose a { color: var(--accent); text-decoration-thickness: 0.08em; text-underline-offset: 0.15em; }
+.prose blockquote { margin-right: 0; margin-left: 0; padding-left: 20px; border-left: 2px solid var(--accent); color: var(--muted); }
+.prose pre { overflow-x: auto; padding: 18px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.85rem; line-height: 1.6; }
+.prose code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.9em; }
+.prose :not(pre) > code { padding: 0.12em 0.28em; border-radius: 3px; background: var(--accent-soft); }
+.prose img { max-width: 100%; height: auto; border-radius: 8px; }
+.prose table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 0.9rem; }
+.prose th, .prose td { padding: 8px 10px; border: 1px solid var(--line); text-align: left; }

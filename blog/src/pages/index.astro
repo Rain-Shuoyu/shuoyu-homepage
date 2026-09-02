@@ -1,20 +1,14 @@
 ---
+import BlogLayout from '../layouts/BlogLayout.astro';
+
 const title = 'Notes — Shuoyu Chen';
 const description = 'Paper notes, engineering practice, and learning materials.';
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <main>
-      <h1>{title}</h1>
-      <p>{description}</p>
-    </main>
-  </body>
-</html>
+<BlogLayout title={title} description={description} canonicalPath="/">
+  <section class="page-intro">
+    <p class="page-kicker" data-i18n-key="homeKicker">Personal archive</p>
+    <h1 class="page-title" data-i18n-key="homeTitle">Notes</h1>
+    <p class="page-description" data-i18n-key="homeDescription">{description}</p>
+  </section>
+</BlogLayout>

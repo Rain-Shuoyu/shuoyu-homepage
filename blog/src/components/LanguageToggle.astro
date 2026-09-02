@@ -1,0 +1,84 @@
+---
+import { dictionaries } from '../i18n';
+---
+
+<div
+  class="language-toggle"
+  data-language-toggle
+  data-dictionaries={JSON.stringify(dictionaries)}
+  role="group"
+  aria-label="Language"
+  data-i18n-aria-label="languageLabel"
+>
+  <span class="sr-only" data-i18n-key="languageLabel">Language</span>
+  <button type="button" data-language="en" aria-pressed="true">EN</button>
+  <span aria-hidden="true">/</span>
+  <button type="button" data-language="zh" aria-pressed="false">中文</button>
+</div>
+
+<script is:inline>
+  const toggle = document.querySelector('[data-language-toggle]');
+  const dictionaries = JSON.parse(toggle?.getAttribute('data-dictionaries') || '{}');
+  const storageKey = 'shuoyu-blog-ui-language';
+  const isLanguage = (value) => value === 'en' || value === 'zh';
+
+  const translate = (language, key, count = '') => {
+    const dictionary = dictionaries[language] || dictionaries.en;
+    const template = dictionary[key] || dictionaries.en[key];
+    return template.replaceAll('{count}', count);
+  };
+
+  const applyLanguage = (language) => {
+    document.documentElement.dataset.uiLang = language;
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+
+    document.querySelectorAll('[data-i18n-key]').forEach((node) => {
+      const rawKey = node.getAttribute('data-i18n-key');
+      if (!rawKey || !(rawKey in dictionaries.en)) return;
+      node.textContent = translate(language, rawKey, node.getAttribute('data-i18n-count') || '');
+    });
+
+    document.querySelectorAll('[data-i18n-aria-label]').forEach((node) => {
+      const rawKey = node.getAttribute('data-i18n-aria-label');
+      if (!rawKey || !(rawKey in dictionaries.en)) return;
+      node.setAttribute('aria-label', translate(language, rawKey));
+    });
+
+    document.querySelectorAll('[data-i18n-date]').forEach((node) => {
+      const value = node.getAttribute('datetime');
+      if (!value) return;
+      node.textContent = new Intl.DateTimeFormat(language === 'zh' ? 'zh-CN' : 'en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        timeZone: 'UTC',
+      }).format(new Date(value));
+    });
+
+    document.querySelectorAll('[data-language]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.getAttribute('data-language') === language));
+    });
+  };
+
+  let stored = null;
+  try {
+    stored = localStorage.getItem(storageKey);
+  } catch {
+    // English remains the static fallback when storage is unavailable.
+  }
+
+  applyLanguage(isLanguage(stored) ? stored : 'en');
+
+  document.querySelectorAll('[data-language]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const language = button.getAttribute('data-language');
+      if (!isLanguage(language)) return;
+      try {
+        localStorage.setItem(storageKey, language);
+      } catch {
+        // The selection remains active for the current page.
+      }
+      applyLanguage(language);
+    });
+  });
+</script>

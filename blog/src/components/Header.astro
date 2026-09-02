@@ -1,0 +1,22 @@
+---
+import LanguageToggle from './LanguageToggle.astro';
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="site-mark" href="/" aria-label="Shuoyu Chen — Notes">
+      SHUOYU.CHEN / NOTES
+    </a>
+    <nav aria-label="Primary navigation" data-i18n-aria-label="primaryNavigation">
+      <a href="/" data-i18n-key="navNotes">Notes</a>
+      <a href="/archive" data-i18n-key="navArchive">Archive</a>
+      <a href="/tags" data-i18n-key="navTags">Tags</a>
+      <a href="/about" data-i18n-key="navAbout">About</a>
+    </nav>
+    <div class="header-controls">
+      <ThemeToggle />
+      <LanguageToggle />
+    </div>
+  </div>
+</header>

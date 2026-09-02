@@ -1,0 +1,53 @@
+<button
+  class="icon-button"
+  type="button"
+  data-theme-toggle
+  aria-label="Toggle color theme"
+  aria-pressed="false"
+  data-i18n-aria-label="themeLabel"
+>
+  <span aria-hidden="true">◐</span>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const button = document.querySelector('[data-theme-toggle]');
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const storedTheme = () => {
+    try {
+      return localStorage.getItem('theme');
+    } catch {
+      return null;
+    }
+  };
+
+  const resolvedTheme = () => root.dataset.theme || (systemDark.matches ? 'dark' : 'light');
+
+  const paintTheme = () => {
+    const dark = resolvedTheme() === 'dark';
+    root.dataset.theme = dark ? 'dark' : 'light';
+    button?.setAttribute('aria-pressed', String(dark));
+    document.querySelector('#theme-color')?.setAttribute('content', dark ? '#0a0d14' : '#eaeef6');
+  };
+
+  button?.addEventListener('click', () => {
+    const next = resolvedTheme() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // The theme remains active for the current page when storage is blocked.
+    }
+    paintTheme();
+  });
+
+  systemDark.addEventListener('change', () => {
+    if (!storedTheme()) {
+      root.dataset.theme = systemDark.matches ? 'dark' : 'light';
+      paintTheme();
+    }
+  });
+
+  paintTheme();
+</script>
