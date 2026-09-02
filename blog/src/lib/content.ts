@@ -1,4 +1,7 @@
+import type { CollectionEntry, CollectionKey } from 'astro:content';
 import type { BlogPost, PostData } from './post-types';
+
+export type AstroBlogPost = CollectionEntry<Extract<'posts', CollectionKey>>;
 
 /**
  * The smallest shape needed by the archive helpers. Keeping this structural
@@ -8,7 +11,7 @@ import type { BlogPost, PostData } from './post-types';
 export type ContentPost = {
   id: string;
   data: Pick<PostData, 'pubDate' | 'tags' | 'draft'>;
-};
+} | AstroBlogPost;
 
 export type TagSummary = {
   slug: string;

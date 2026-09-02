@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 import { postTypes } from './lib/post-types';
 
@@ -6,14 +7,14 @@ const paperSchema = z.object({
   title: z.string().trim().min(1).optional(),
   authors: z.array(z.string().trim().min(1)).optional(),
   venue: z.string().trim().min(1).optional(),
-  year: z.number().int().optional(),
-  url: z.string().url().optional(),
+  year: z.number().int().min(1900).max(2100).optional(),
+  url: z.url().optional(),
 });
 
 const linksSchema = z.object({
-  paper: z.string().url().optional(),
-  repo: z.string().url().optional(),
-  demo: z.string().url().optional(),
+  paper: z.url().optional(),
+  repo: z.url().optional(),
+  demo: z.url().optional(),
 });
 
 const postSchema = z.object({
