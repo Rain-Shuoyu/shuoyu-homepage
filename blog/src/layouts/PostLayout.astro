@@ -1,0 +1,71 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
+import BlogLayout from './BlogLayout.astro';
+import PaperDetails from '../components/PaperDetails.astro';
+import PostMeta from '../components/PostMeta.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import { postPath } from '../lib/content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  headings: MarkdownHeading[];
+  newer?: CollectionEntry<'posts'>;
+  older?: CollectionEntry<'posts'>;
+}
+
+const { post, headings, newer, older } = Astro.props;
+const canonicalPath = postPath(post);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  ...(post.data.updatedDate ? { dateModified: post.data.updatedDate.toISOString() } : {}),
+  mainEntityOfPage: 'https://blog.shuoyu.me' + canonicalPath,
+  author: { '@type': 'Person', name: 'Shuoyu Chen', url: 'https://shuoyu.me/' },
+  publisher: { '@type': 'Person', name: 'Shuoyu Chen', url: 'https://shuoyu.me/' },
+};
+---
+
+<BlogLayout
+  title={post.data.title + ' — Shuoyu Chen'}
+  description={post.data.description}
+  canonicalPath={canonicalPath}
+  ogType="article"
+  ogImage={post.data.cover}
+  publishedTime={post.data.pubDate}
+  modifiedTime={post.data.updatedDate}
+  jsonLd={jsonLd}
+>
+  <article class="post-shell">
+    <header class="post-header">
+      <p class="page-kicker" data-i18n-key="homeKicker">Personal archive</p>
+      <h1 class="post-title">{post.data.title}</h1>
+      <p class="post-description">{post.data.description}</p>
+      <PostMeta post={post} />
+    </header>
+
+    {post.data.cover && <img class="post-cover" src={post.data.cover} alt={post.data.title} />}
+    <PaperDetails paper={post.data.paper} links={post.data.links} />
+    <TableOfContents headings={headings} />
+    <div class="prose"><slot /></div>
+
+    <footer class="post-footer">
+      {newer ? (
+        <a class="post-nav-link" href={postPath(newer)}>
+          <span class="post-nav-label" data-i18n-key="newerNote">Newer note</span>
+          <span class="post-nav-title">{newer.data.title}</span>
+        </a>
+      ) : <span />}
+      {older ? (
+        <a class="post-nav-link" href={postPath(older)}>
+          <span class="post-nav-label" data-i18n-key="olderNote">Older note</span>
+          <span class="post-nav-title">{older.data.title}</span>
+        </a>
+      ) : <span />}
+    </footer>
+    <p><a href="/archive" data-i18n-key="backToArchive">Back to archive</a></p>
+  </article>
+</BlogLayout>

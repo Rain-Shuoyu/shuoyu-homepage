@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { publishedPosts } from '../../lib/content';
+
+const posts = publishedPosts(await getCollection('posts'));
+type PostEntry = CollectionEntry<'posts'>;
+
+interface Props {
+  post: PostEntry;
+  newer?: PostEntry;
+  older?: PostEntry;
+}
+
+export function getStaticPaths() {
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[index - 1], older: posts[index + 1] },
+  }));
+}
+
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<PostLayout post={post} headings={headings} newer={newer} older={older}>
+  <Content />
+</PostLayout>

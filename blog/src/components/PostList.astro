@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostMeta from './PostMeta.astro';
+import { postPath } from '../lib/content';
+
+interface Props {
+  posts: readonly CollectionEntry<'posts'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length === 0 ? (
+  <p class="empty-state" data-i18n-key="emptyPosts">No notes have been published yet.</p>
+) : (
+  <ol class="post-list">
+    {posts.map((post) => (
+      <li class="post-list-item">
+        <h2 class="post-list-title"><a href={postPath(post)}>{post.data.title}</a></h2>
+        <p class="post-list-description">{post.data.description}</p>
+        <PostMeta post={post} />
+      </li>
+    ))}
+  </ol>
+)}

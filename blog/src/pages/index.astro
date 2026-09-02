@@ -1,5 +1,8 @@
 ---
+import { getCollection } from 'astro:content';
 import BlogLayout from '../layouts/BlogLayout.astro';
+import PostList from '../components/PostList.astro';
+import { publishedPosts } from '../lib/content';
 
 const title = 'Notes — Shuoyu Chen';
 const description = 'Paper notes, engineering practice, and learning materials.';
@@ -11,4 +14,5 @@ const description = 'Paper notes, engineering practice, and learning materials.'
     <h1 class="page-title" data-i18n-key="homeTitle">Notes</h1>
     <p class="page-description" data-i18n-key="homeDescription">{description}</p>
   </section>
+  <PostList posts={publishedPosts(await getCollection('posts'))} />
 </BlogLayout>

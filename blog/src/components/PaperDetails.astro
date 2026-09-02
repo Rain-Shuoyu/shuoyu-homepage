@@ -1,0 +1,41 @@
+---
+import type { PaperMeta, PostLinks } from '../lib/post-types';
+
+interface Props {
+  paper?: PaperMeta;
+  links?: PostLinks;
+}
+
+const { paper, links } = Astro.props;
+const hasPaper = Boolean(
+  paper && (paper.title || paper.authors?.length || paper.venue || paper.year || paper.url),
+);
+const paperUrl = paper?.url ?? links?.paper;
+const hasLinks = Boolean(paperUrl || links?.repo || links?.demo);
+---
+
+{(hasPaper || hasLinks) && (
+  <aside class="paper-details">
+    {hasPaper && (
+      <>
+        <p data-i18n-key="paperDetails">Paper details</p>
+        {paper?.title && <p>{paper.title}</p>}
+        {paper?.authors && paper.authors.length > 0 && (
+          <p><strong data-i18n-key="authors">Authors</strong>: {paper.authors.join(', ')}</p>
+        )}
+        {paper?.venue && (
+          <p>
+            <strong data-i18n-key="venue">Venue</strong>: {paper.venue}{paper.year ? ' ' + paper.year : ''}
+          </p>
+        )}
+      </>
+    )}
+    {hasLinks && (
+      <ul>
+        {paperUrl && <li><a href={paperUrl} rel="noreferrer" target="_blank" data-i18n-key="originalPaper">Original paper</a></li>}
+        {links?.repo && <li><a href={links.repo} rel="noreferrer" target="_blank" data-i18n-key="repository">Repository</a></li>}
+        {links?.demo && <li><a href={links.demo} rel="noreferrer" target="_blank" data-i18n-key="demo">Demo</a></li>}
+      </ul>
+    )}
+  </aside>
+)}

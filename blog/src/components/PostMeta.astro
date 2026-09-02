@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, typeLabelKey } from '../i18n';
+import { tagPath } from '../lib/content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const typeKey = typeLabelKey(post.data.type);
+const typeLabel = typeKey === 'typePaperNotes'
+  ? 'Paper notes'
+  : typeKey === 'typeEngineering'
+    ? 'Engineering'
+    : 'Learning';
+---
+
+<dl class="post-meta">
+  <div class="post-meta-group">
+    <dt data-i18n-key={typeKey}>{typeLabel}</dt>
+  </div>
+  <div class="post-meta-group">
+    <dt data-i18n-key="published">Published</dt>
+    <dd>
+      <time datetime={post.data.pubDate.toISOString()} data-i18n-date>
+        {formatDate(post.data.pubDate, 'en')}
+      </time>
+    </dd>
+  </div>
+  {post.data.updatedDate && (
+    <div class="post-meta-group">
+      <dt data-i18n-key="updated">Updated</dt>
+      <dd>
+        <time datetime={post.data.updatedDate.toISOString()} data-i18n-date>
+          {formatDate(post.data.updatedDate, 'en')}
+        </time>
+      </dd>
+    </div>
+  )}
+</dl>
+
+<ul class="tag-row" aria-label="Tags" data-i18n-aria-label="navTags">
+  {post.data.tags.map((tag) => (
+    <li><a class="tag-link" href={tagPath(tag)}>{tag}</a></li>
+  ))}
+</ul>
