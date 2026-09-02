@@ -18,8 +18,10 @@ const entries = visibleHeadings.map((heading, index) => ({
 ---
 
 {entries.length > 0 && (
-  <nav class="table-of-contents" aria-label="On this page" data-i18n-aria-label="tableOfContents">
-    <p class="page-kicker" data-i18n-key="tableOfContents">On this page</p>
+  <details class="table-of-contents">
+    <summary class="table-of-contents-summary" aria-label="On this page" data-i18n-aria-label="tableOfContents">
+      <span class="page-kicker table-of-contents-label" data-i18n-key="tableOfContents">On this page</span>
+    </summary>
     <ol>
       {entries.map(({ heading, language }) => (
         <li
@@ -31,5 +33,5 @@ const entries = visibleHeadings.map((heading, index) => ({
         </li>
       ))}
     </ol>
-  </nav>
+  </details>
 )}
