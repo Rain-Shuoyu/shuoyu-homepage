@@ -71,18 +71,26 @@ import { dictionaries } from '../i18n';
     // English remains the static fallback when storage is unavailable.
   }
 
-  applyLanguage(isLanguage(stored) ? stored : 'en');
+  const initializeLanguage = () => {
+    applyLanguage(isLanguage(stored) ? stored : 'en');
 
-  document.querySelectorAll('[data-language]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const language = button.getAttribute('data-language');
-      if (!isLanguage(language)) return;
-      try {
-        localStorage.setItem(storageKey, language);
-      } catch {
-        // The selection remains active for the current page.
-      }
-      applyLanguage(language);
+    document.querySelectorAll('[data-language]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const language = button.getAttribute('data-language');
+        if (!isLanguage(language)) return;
+        try {
+          localStorage.setItem(storageKey, language);
+        } catch {
+          // The selection remains active for the current page.
+        }
+        applyLanguage(language);
+      });
     });
-  });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeLanguage, { once: true });
+  } else {
+    initializeLanguage();
+  }
 </script>
