@@ -20,6 +20,10 @@
     "build:blog": "npm run build --workspace blog",
     "build:all": "npm run build && npm run build:blog",
     "verify:blog-build": "node scripts/verify-blog-build.mjs",
+    "corl2024:bootstrap": "node scripts/corl2024/bootstrap.mjs",
+    "corl2024:inspect": "node scripts/corl2024/inspect.mjs",
+    "corl2024:validate": "node scripts/corl2024/validate.mjs",
+    "corl2024:summary": "node scripts/corl2024/summary.mjs",
     "preview": "astro preview",
     "og": "node scripts/build-og.mjs"
   },
@@ -28,6 +32,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "cheerio": "^1.2.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   }
