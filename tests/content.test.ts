@@ -30,7 +30,7 @@ describe('homepage content', () => {
   it('keeps the approved research submission statuses', () => {
     const bySlug = Object.fromEntries(researchProjects.map((project) => [project.slug, project]));
 
-    expect(bySlug.bidexgrasp.meta).toBe('CoRL 2026 · Under Review');
+    expect(bySlug.bidexgrasp.meta).toBe('CoRL 2026');
     expect(bySlug.dynamicmanip.meta).toBe('NeurIPS 2026 · Under Review');
   });
 

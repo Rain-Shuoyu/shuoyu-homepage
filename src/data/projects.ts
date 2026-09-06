@@ -139,7 +139,7 @@ export const researchProjects: Project[] = [
     slug: 'bidexgrasp',
     name: 'BiDexGrasp',
     section: 'research',
-    meta: 'CoRL 2026 · Under Review',
+    meta: 'CoRL 2026',
     description: 'Coordinated bimanual dexterous grasping across objects with diverse geometries and sizes.',
     tags: ['Bimanual Manipulation', 'Data Generation'],
     href: 'https://frenkielm.github.io/BiDexGrasp.github.io/',
