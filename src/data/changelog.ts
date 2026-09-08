@@ -8,6 +8,13 @@ export type ChangelogEntry = {
    since commit subjects like "chore: initialize" are not reader-facing. */
 export const changelog: ChangelogEntry[] = [
   {
+    date: '2026-09-09',
+    title: 'BiDexGrasp accepted at CoRL 2026',
+    items: [
+      'Updated the BiDexGrasp publication status from under review to accepted at CoRL 2026.',
+    ],
+  },
+  {
     date: '2026-08-26',
     title: 'CV, share card, and a 404 page',
     items: [
