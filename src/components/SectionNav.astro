@@ -5,7 +5,16 @@ import { site } from '../data/site';
 <nav class="section-nav" aria-label="Sections">
   <ul>
     {site.navigation.map((item) => (
-      <li><a href={item.href} data-nav-link>{item.label}</a></li>
+      <li>
+        <a
+          href={item.href}
+          data-nav-link
+          target={item.href.startsWith('http') ? '_blank' : undefined}
+          rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          {item.label}
+        </a>
+      </li>
     ))}
   </ul>
 </nav>

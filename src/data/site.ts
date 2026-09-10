@@ -15,6 +15,7 @@ export const site = {
   city: 'Guangzhou',
   countryCode: 'CN',
   github: 'https://github.com/Rain-Shuoyu',
+  blog: 'https://blog.shuoyu.me/',
   /* Points at an on-request page, not a file. The CV is deliberately not
      published yet; nothing under public/ should carry personal detail
      ahead of application season. */
@@ -61,5 +62,6 @@ export const site = {
     { label: 'News', href: '#news' },
     { label: 'Research', href: '#research' },
     { label: 'Others', href: '#others' },
+    { label: 'Blog', href: 'https://blog.shuoyu.me/' },
   ],
 } as const;

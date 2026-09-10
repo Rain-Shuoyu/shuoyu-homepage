@@ -12,6 +12,7 @@ describe('homepage content', () => {
     expect(site.github).toBe('https://github.com/Rain-Shuoyu');
     expect(site.email).toBe('shuoyu_chen@qq.com');
     expect(isExternalUrl(site.github)).toBe(true);
+    expect(site.blog).toBe('https://blog.shuoyu.me/');
   });
 
   it('keeps the approved research order', () => {
@@ -43,6 +44,7 @@ describe('homepage content', () => {
       'News',
       'Research',
       'Others',
+      'Blog',
     ]);
     expect(otherProjects.every((project) => project.section === 'others')).toBe(true);
   });
