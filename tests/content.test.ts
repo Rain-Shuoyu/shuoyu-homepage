@@ -22,8 +22,28 @@ describe('homepage content', () => {
     ]);
   });
 
+  it('keeps the approved news order and statuses', () => {
+    expect(site.news.map((item) => item.date)).toEqual([
+      '2026.09',
+      '2026.05',
+      '2026.01',
+      '2025.07',
+    ]);
+    expect(site.news.map((item) => item.title)).toEqual([
+      'BiDexGrasp accepted by CoRL 2026',
+      'DynamicManip submitted to NeurIPS 2026',
+      'OmniDexGrasp accepted by ICRA 2026',
+      'Joined the iSEE Lab',
+    ]);
+  });
+
   it('uses Others as the public name for side projects', () => {
-    expect(site.navigation.map((item) => item.label)).toEqual(['About', 'Research', 'Others']);
+    expect(site.navigation.map((item) => item.label)).toEqual([
+      'About',
+      'News',
+      'Research',
+      'Others',
+    ]);
     expect(otherProjects.every((project) => project.section === 'others')).toBe(true);
   });
 

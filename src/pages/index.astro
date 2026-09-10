@@ -4,6 +4,7 @@ import SideIdentity from '../components/SideIdentity.astro';
 import ResearchList from '../components/ResearchList.astro';
 import OthersList from '../components/OthersList.astro';
 import AboutSection from '../components/AboutSection.astro';
+import NewsList from '../components/NewsList.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import PersonSchema from '../components/PersonSchema.astro';
 import { site } from '../data/site';
@@ -19,6 +20,8 @@ import { otherProjects, researchProjects } from '../data/projects';
 
     <main class="content" id="main">
       <AboutSection />
+
+      <NewsList />
 
       <ResearchList projects={researchProjects} />
 

@@ -21,6 +21,32 @@ export const site = {
   cv: '/cv',
   email: 'shuoyu_chen@qq.com',
   description: 'Grounding intelligence in the physical world.',
+  news: [
+    {
+      date: '2026.09',
+      type: 'Research',
+      title: 'BiDexGrasp accepted by CoRL 2026',
+      description: 'Our work on coordinated bimanual dexterous grasping was accepted by CoRL 2026.',
+    },
+    {
+      date: '2026.05',
+      type: 'Research',
+      title: 'DynamicManip submitted to NeurIPS 2026',
+      description: 'Submitted our work on dynamic manipulation from a single static demonstration.',
+    },
+    {
+      date: '2026.01',
+      type: 'Research',
+      title: 'OmniDexGrasp accepted by ICRA 2026',
+      description: 'Our work on generalizable dexterous grasping was accepted by ICRA 2026.',
+    },
+    {
+      date: '2025.07',
+      type: 'Milestone',
+      title: 'Joined the iSEE Lab',
+      description: 'Started conducting undergraduate research at the iSEE Laboratory of Sun Yat-sen University.',
+    },
+  ],
   about: [
     'I am Shuoyu Chen, an undergraduate student at the School of Computer Science, Sun Yat-sen University, majoring in Computer Science and Technology.',
     'Currently, I am conducting undergraduate research at the iSEE Laboratory of Sun Yat-sen University.',
@@ -32,6 +58,7 @@ export const site = {
   ],
   navigation: [
     { label: 'About', href: '#about' },
+    { label: 'News', href: '#news' },
     { label: 'Research', href: '#research' },
     { label: 'Others', href: '#others' },
   ],

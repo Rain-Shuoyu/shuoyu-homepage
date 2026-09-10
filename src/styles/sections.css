@@ -142,6 +142,65 @@
   margin-top: 0.65rem;
 }
 
+/* ---------- News ---------- */
+
+.news-list {
+  display: grid;
+  gap: 0;
+  margin-top: 0.35rem;
+}
+
+.news-item {
+  display: grid;
+  grid-template-columns: 5.25rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.news-item:first-child {
+  padding-top: 0.7rem;
+}
+
+.news-date {
+  padding-top: 0.1rem;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.news-meta {
+  margin-bottom: 0.2rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.news-copy h3 {
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.news-description {
+  max-width: 62ch;
+  margin-top: 0.22rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 520px) {
+  .news-item {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+}
+
 /* ---------- Link pills ---------- */
 
 /* Glass capsules; .glass supplies fill, ring and blur. */

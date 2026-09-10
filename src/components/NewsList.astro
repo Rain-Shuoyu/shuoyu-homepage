@@ -1,0 +1,27 @@
+---
+import { site } from '../data/site';
+import SectionHeader from './SectionHeader.astro';
+---
+
+<section id="news" class="reveal news-section" aria-labelledby="news-heading">
+  <SectionHeader
+    index="02"
+    kicker="News"
+    title="Latest updates"
+    headingId="news-heading"
+    count={site.news.length}
+  />
+
+  <ol class="news-list">
+    {site.news.map((item) => (
+      <li class="news-item">
+        <time class="news-date" datetime={item.date.replace('.', '-')}>{item.date}</time>
+        <div class="news-copy">
+          <p class="news-meta">{item.type}</p>
+          <h3>{item.title}</h3>
+          <p class="news-description">{item.description}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
