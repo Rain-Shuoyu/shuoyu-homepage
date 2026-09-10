@@ -1,6 +1,8 @@
 ---
 import type { Project } from '../data/projects';
 import SectionHeader from './SectionHeader.astro';
+import LinkIcon from './LinkIcon.astro';
+import { iconForLink } from '../lib/link-icon';
 
 interface Props {
   projects: Project[];
@@ -11,6 +13,17 @@ const { projects } = Astro.props;
 /* A 4-digit year means a real venue (e.g. "ICRA 2026") and earns the
    amber badge; descriptive labels stay plain. */
 const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
+const selfName = 'Shuoyu Chen';
+
+const roleLabel = (project: Project) => {
+  const author = project.detail?.authors?.find((item) => item.name === selfName);
+  return author?.roles?.includes('first') ? 'Co-first author' : 'Research contributor';
+};
+
+const cardLinks = (project: Project) => [
+  { label: 'Project', href: project.href },
+  ...(project.detail?.links ?? []),
+];
 ---
 
 <section id="research" class="reveal" aria-labelledby="research-heading">
@@ -26,15 +39,8 @@ const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
   <ul class="research-list">
     {projects.map((project, i) => (
       <li>
-        {/* Links inward to the project's own page rather than straight
-            out to the project site — the outbound link lives there.
-            The whole card is the anchor, so no stretched pseudo-element
-            is needed under the glass layers. aria-labelledby keeps the
-            accessible name to the title rather than every word inside. */}
-        <a
+        <article
           class="research-card glass glass-tint glass-lift"
-          href={`/research/${project.slug}`}
-          aria-labelledby={`research-${project.slug}`}
           style={`--row-index:${i}`}
         >
           <div class="research-head">
@@ -42,7 +48,9 @@ const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
               {String(i + 1).padStart(2, '0')}
             </span>
             <h3 class="research-title" id={`research-${project.slug}`}>
-              <span class="research-title-text">{project.name}</span>
+              <a href={`/research/${project.slug}`}>
+                <span class="research-title-text">{project.name}</span>
+              </a>
             </h3>
           </div>
 
@@ -56,12 +64,32 @@ const isVenue = (meta: string) => /\b(19|20)\d{2}\b/.test(meta);
 
           <p class="research-desc">{project.description}</p>
 
+          <div class="research-detail-row">
+            <span class="research-role">{roleLabel(project)}</span>
+            <div class="research-actions" aria-label={`${project.name} links`}>
+              <a class="research-details-link" href={`/research/${project.slug}`}>
+                Details <span aria-hidden="true">→</span>
+              </a>
+              {cardLinks(project).map((link) => (
+                <a
+                  class="research-action"
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <LinkIcon name={iconForLink(link)} />
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
           <ul class="research-tags">
             {project.tags.map((tag) => (
               <li>{tag}</li>
             ))}
           </ul>
-        </a>
+        </article>
       </li>
     ))}
   </ul>
