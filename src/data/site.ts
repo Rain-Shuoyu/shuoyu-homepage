@@ -59,8 +59,8 @@ export const site = {
   ],
   navigation: [
     { label: 'About', href: '#about' },
-    { label: 'News', href: '#news' },
     { label: 'Research', href: '#research' },
+    { label: 'News', href: '#news' },
     { label: 'Others', href: '#others' },
     { label: 'Blog', href: 'https://blog.shuoyu.me/' },
   ],

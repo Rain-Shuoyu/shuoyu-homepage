@@ -28,11 +28,8 @@ const cardLinks = (project: Project) => [
 
 <section id="research" class="reveal" aria-labelledby="research-heading">
   <SectionHeader
-    index="03"
-    kicker="Research"
     title="Selected work"
     headingId="research-heading"
-    count={projects.length}
     tone="lead"
   />
 
@@ -40,55 +37,68 @@ const cardLinks = (project: Project) => [
     {projects.map((project, i) => (
       <li>
         <article
-          class="research-card glass glass-tint glass-lift"
+          class:list={['research-card', { 'research-card-no-image': !project.detail?.media || (project.detail.media.kind === 'video' && !project.detail.media.poster) }]}
           style={`--row-index:${i}`}
         >
-          <div class="research-head">
-            <span class="research-number" aria-hidden="true">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <h3 class="research-title" id={`research-${project.slug}`}>
-              <a href={`/research/${project.slug}`}>
-                <span class="research-title-text">{project.name}</span>
-              </a>
-            </h3>
-          </div>
-
-          <div class="research-side">
-            <span class:list={['research-venue', { 'is-plain': !isVenue(project.meta) }]}>
-              {project.meta}
-            </span>
-            {/* Rightward, not diagonal: this navigates within the site. */}
-            <span class="research-arrow" aria-hidden="true">→</span>
-          </div>
-
-          <p class="research-desc">{project.description}</p>
-
-          <div class="research-detail-row">
-            <span class="research-role">{roleLabel(project)}</span>
-            <div class="research-actions" aria-label={`${project.name} links`}>
-              <a class="research-details-link" href={`/research/${project.slug}`}>
-                Details <span aria-hidden="true">→</span>
-              </a>
-              {cardLinks(project).map((link) => (
-                <a
-                  class="research-action"
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <LinkIcon name={iconForLink(link)} />
-                  {link.label}
+          {project.detail?.media && (project.detail.media.kind === 'image' || project.detail.media.poster) && (
+            <a class="research-image-link" href={`/research/${project.slug}`} aria-label={`View ${project.name} details`}>
+              <img
+                class="research-image"
+                src={project.detail.media.kind === 'image' ? project.detail.media.src : project.detail.media.poster}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          )}
+          <div class="research-content">
+            <div class="research-head">
+              <span class="research-number" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 class="research-title" id={`research-${project.slug}`}>
+                <a href={`/research/${project.slug}`}>
+                  <span class="research-title-text">{project.name}</span>
                 </a>
-              ))}
+              </h3>
             </div>
-          </div>
 
-          <ul class="research-tags">
-            {project.tags.map((tag) => (
-              <li>{tag}</li>
-            ))}
-          </ul>
+            <div class="research-side">
+              <span class:list={['research-venue', { 'is-plain': !isVenue(project.meta) }]}>
+                {project.meta}
+              </span>
+              {/* Rightward, not diagonal: this navigates within the site. */}
+              <span class="research-arrow" aria-hidden="true">→</span>
+            </div>
+
+            <p class="research-desc">{project.description}</p>
+
+            <div class="research-detail-row">
+              <span class="research-role">{roleLabel(project)}</span>
+              <div class="research-actions" aria-label={`${project.name} links`}>
+                <a class="research-details-link" href={`/research/${project.slug}`}>
+                  Details <span aria-hidden="true">→</span>
+                </a>
+                {cardLinks(project).map((link) => (
+                  <a
+                    class="research-action"
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <LinkIcon name={iconForLink(link)} />
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <ul class="research-tags">
+              {project.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </div>
         </article>
       </li>
     ))}

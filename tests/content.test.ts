@@ -41,8 +41,8 @@ describe('homepage content', () => {
   it('uses Others as the public name for side projects', () => {
     expect(site.navigation.map((item) => item.label)).toEqual([
       'About',
-      'News',
       'Research',
+      'News',
       'Others',
       'Blog',
     ]);
