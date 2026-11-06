@@ -83,3 +83,17 @@ body { background: #fff; line-height: 1.65; }
   .identity { position: static; }
   .research-card { padding: 1.25rem 0; }
 }
+
+/* Give small text enough presence without making the page feel heavy. */
+body { font-weight: 450; }
+:root,
+:root[data-theme='dark'],
+:root:not([data-theme='light']) {
+  --ink-soft: #303030;
+  --muted: #555;
+}
+.identity-meta, .identity-bio { font-size: 0.9rem; }
+.about-body, .research-desc { font-size: 0.95rem; }
+.news-description, .others-desc { font-size: 0.875rem; }
+.research-action, .research-details-link, .research-tags li { font-size: 0.78rem; }
+.section-kicker, .news-meta, .research-role, .others-meta { font-size: 0.72rem; }
