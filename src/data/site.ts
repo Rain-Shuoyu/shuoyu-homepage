@@ -50,12 +50,12 @@ export const site = {
   ],
   about: [
     'I am Shuoyu Chen, an undergraduate student at the School of Computer Science, Sun Yat-sen University, majoring in Computer Science and Technology.',
-    'Currently, I am conducting undergraduate research at the iSEE Laboratory of Sun Yat-sen University.',
+    'Currently, I am conducting undergraduate research at the iSEE Laboratory of Sun Yat-sen University. My research focuses on dexterous manipulation, agentic AI, and robotics.',
   ],
   researchFocus: [
-    'Embodied Intelligence',
-    'Robotic Dexterous Manipulation',
-    'Computer Vision',
+    'Dexterous Manipulation',
+    'Agentic AI',
+    'Robotics',
   ],
   navigation: [
     { label: 'About', href: '#about' },
