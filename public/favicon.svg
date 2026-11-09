@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="favicon-title">
-  <title id="favicon-title">Shuoyu Chen</title>
-  <rect x="2" y="2" width="60" height="60" rx="14" fill="#17212b" />
-  <path d="M44 20H20v12h24v12H20" fill="none" stroke="#3e76ad" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Shuoyu Chen</title>
+  <rect x="3" y="3" width="58" height="58" rx="14" fill="#fff" stroke="#171717" stroke-width="3" />
+  <path d="M42 21c-2.4-2.4-5.8-3.7-10-3.7-6.7 0-11 3.2-11 8.2 0 5.2 4.8 6.7 11 8.1 6.3 1.4 11 3 11 8.2 0 5-4.5 8.9-11.6 8.9-4.6 0-8.7-1.6-11.8-4.5" fill="none" stroke="#171717" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
