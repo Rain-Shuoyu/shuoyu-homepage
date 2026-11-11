@@ -193,7 +193,7 @@ export const researchProjects: Project[] = [
     slug: 'dynamicmanip',
     name: 'DynamicManip',
     section: 'research',
-    meta: 'NeurIPS 2026 · Under Review',
+    meta: 'ICLR 2027 · Under Review',
     description: 'A static-to-dynamic augmentation pipeline and adaptive policy for responsive dynamic manipulation.',
     tags: ['Dynamic Manipulation', 'Adaptive Policy'],
     href: 'https://liaohr9.github.io/DynamicManip/',

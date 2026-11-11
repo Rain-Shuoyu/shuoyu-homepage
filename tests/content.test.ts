@@ -26,13 +26,13 @@ describe('homepage content', () => {
   it('keeps the approved news order and statuses', () => {
     expect(site.news.map((item) => item.date)).toEqual([
       '2026.09',
-      '2026.05',
+      '2026.09',
       '2026.01',
       '2025.07',
     ]);
     expect(site.news.map((item) => item.title)).toEqual([
       'BiDexGrasp accepted by CoRL 2026',
-      'DynamicManip submitted to NeurIPS 2026',
+      'DynamicManip submitted to ICLR 2027',
       'OmniDexGrasp accepted by ICRA 2026',
       'Joined the iSEE Lab',
     ]);
@@ -53,7 +53,7 @@ describe('homepage content', () => {
     const bySlug = Object.fromEntries(researchProjects.map((project) => [project.slug, project]));
 
     expect(bySlug.bidexgrasp.meta).toBe('CoRL 2026');
-    expect(bySlug.dynamicmanip.meta).toBe('NeurIPS 2026 · Under Review');
+    expect(bySlug.dynamicmanip.meta).toBe('ICLR 2027 · Under Review');
   });
 
   it('includes the approved contribution summary for each research project', () => {

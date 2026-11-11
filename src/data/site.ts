@@ -30,9 +30,9 @@ export const site = {
       description: 'Our work on coordinated bimanual dexterous grasping was accepted by CoRL 2026.',
     },
     {
-      date: '2026.05',
+      date: '2026.09',
       type: 'Research',
-      title: 'DynamicManip submitted to NeurIPS 2026',
+      title: 'DynamicManip submitted to ICLR 2027',
       description: 'Submitted our work on dynamic manipulation from a single static demonstration.',
     },
     {
